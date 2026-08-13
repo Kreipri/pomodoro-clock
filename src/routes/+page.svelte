@@ -229,6 +229,7 @@
 </svelte:head>
 
 <main>
+  <div class="background-shape"></div>
   <h1>Pomodoro Clock</h1>
 
   <!--
@@ -318,3 +319,23 @@
     </div>
   </section>
 </main>
+
+<style>
+  main {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .background-shape {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #ff6b6b 0%, #ee5a6f 100%);
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    z-index: -1;
+    opacity: 0.3;
+  }
+</style>
