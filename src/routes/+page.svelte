@@ -243,12 +243,13 @@
     onpointerdown={startDragging}
   >
     <!-- Window control buttons — these affect the OS window, not the timer. -->
-    <nav aria-label="Window controls">
+    <nav class="window-controls" aria-label="Window controls">
       <!--
         aria-pressed tells screen readers this is a toggle button and whether
         it is currently active (true) or inactive (false).
       -->
       <button
+        class="window-control"
         type="button"
         aria-label={pinned ? "Disable always on top" : "Enable always on top"}
         aria-pressed={pinned}
@@ -259,8 +260,8 @@
         {pinned ? "Unpin" : "Pin"}
       </button>
 
-      <button type="button" onclick={minimizeWindow}>Minimize</button>
-      <button type="button" onclick={closeWindow}>Close</button>
+      <button class="window-control" type="button" onclick={minimizeWindow}>Minimize</button>
+      <button class="window-control close-button" type="button" onclick={closeWindow}>Close</button>
     </nav>
 
     <div>
@@ -324,6 +325,45 @@
   main {
     position: relative;
     overflow: hidden;
+    min-height: 100vh;
+  }
+
+  section {
+    position: relative;
+    min-height: 100vh;
+    padding: 48px 24px 24px;
+  }
+
+  .window-controls {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  .window-control {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(18, 18, 18, 0.35);
+    color: #f5f5f5;
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .window-control:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .window-control:active {
+    transform: translateY(1px);
+  }
+
+  .close-button {
+    background: rgba(255, 107, 107, 0.18);
   }
 
   .background-shape {
