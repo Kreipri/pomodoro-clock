@@ -6,6 +6,11 @@
   // This gives us access to the native desktop window (provided by Tauri).
   import { getCurrentWindow } from "@tauri-apps/api/window";
 
+  // Import Tauri's file system functions to save session logs.
+  // BaseDirectory.AppData points to the user's app data folder.
+  // writeTextFile writes data to a file (creates it if it doesn't exist).
+  import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
+
   // Get a reference to the current app window so we can move, pin, or close it.
   const appWindow = getCurrentWindow();
 
@@ -141,6 +146,9 @@
 
   // Move to the next session in the SESSIONS list and immediately start it.
   function advanceSession() {
+    // Log the completed session before moving to the next one.
+    logCompletedSession();
+
     // Stop the current interval before changing state.
     pauseTimer();
 
@@ -161,6 +169,54 @@
       clearInterval(intervalId);
     }
   });
+
+  // ---------------------------------------------------------------------------
+  // Session logging
+  // ---------------------------------------------------------------------------
+
+  // Helper function to format dates in a readable way (e.g., "2024-01-15 14:30:45").
+  function formatDateTime(): string {
+    const now = new Date();
+    
+    // Get the date parts (year, month, day).
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0"); // months are 0-indexed
+    const day = String(now.getDate()).padStart(2, "0");
+    
+    // Get the time parts (hours, minutes, seconds).
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    
+    // Return in ISO format: YYYY-MM-DD HH:MM:SS
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
+  // Log a completed session to the sessions log file.
+  // This creates or appends to a file called "sessions.log" in the app data folder.
+  async function logCompletedSession(): Promise<void> {
+    try {
+      // Get the label and duration of the session that just finished.
+      const sessionName = SESSIONS[(sessionIndex - 1 + SESSIONS.length) % SESSIONS.length].label;
+      const sessionMinutes = SESSIONS[(sessionIndex - 1 + SESSIONS.length) % SESSIONS.length].minutes;
+      
+      // Create a log entry with the format: "Timestamp | Session Name | Duration".
+      // Example: "2024-01-15 14:30:45 | Focus session | 25 minutes"
+      const logEntry = `${formatDateTime()} | ${sessionName} | ${sessionMinutes} minutes\n`;
+      
+      // Append the log entry to the file.
+      // The second parameter (false) means append mode instead of overwriting.
+      // BaseDirectory.AppData stores it in the user's app data folder.
+      await writeTextFile(
+        "sessions.log",
+        logEntry,
+        { dir: BaseDirectory.AppData, append: true }
+      );
+    } catch (error) {
+      // If logging fails, just log to the browser console. Don't break the timer.
+      console.error("Failed to log session:", error);
+    }
+  }
 
   // ---------------------------------------------------------------------------
   // Window management
