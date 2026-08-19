@@ -13,9 +13,9 @@
     "windows": [
       {
         "label": "main",
-        "title": "Pomodoro Clock",
-        "width": 320,
-        "height": 320,
+        "title": "Nibbles · Productivity Familiar",
+        "width": 390,
+        "height": 520,
         "center": true,
         "resizable": false,
         "maximizable": false,
