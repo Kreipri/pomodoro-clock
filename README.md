@@ -1,7 +1,17 @@
-# Tauri + SvelteKit + TypeScript
+# Nibbles
 
-This template should help get you started developing with Tauri, SvelteKit and TypeScript in Vite.
+Nibbles is a tiny eldritch productivity familiar. During a focus session it
+watches the active desktop window. Allowed app or browser-tab title keywords
+keep it calm; distracting windows let it grow through increasingly intrusive
+forms until you return.
 
-## Recommended IDE Setup
+## Run it
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+```sh
+npm run tauri dev
+```
+
+If PowerShell blocks `npm.ps1`, use `npm.cmd run tauri dev` instead.
+
+The active-window watcher currently targets Windows. Whitelist matching stays
+on the device and only compares the visible foreground-window title.
