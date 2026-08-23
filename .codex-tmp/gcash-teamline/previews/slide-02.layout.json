@@ -1,0 +1,1153 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/tsfz6p",
+    "id": "tsfz6p",
+    "slide": 2,
+    "layoutId": "bca6ea76-f24f-49d2-8ff9-4c274f1801d3",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "3c1168aa-fc2d-44bc-ac42-34ad16dd9f65",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#FFFFFF",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Arial"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "bca6ea76-f24f-49d2-8ff9-4c274f1801d3",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "3c1168aa-fc2d-44bc-ac42-34ad16dd9f65",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "3c1168aa-fc2d-44bc-ac42-34ad16dd9f65",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/bitk3u9o",
+      "id": "1",
+      "name": "kicker-01",
+      "bbox": [
+        56,
+        36,
+        520,
+        28
+      ],
+      "geometry": "rect",
+      "text": "01  /  THE NEGOSYANTE",
+      "textPreview": "01  /  THE NEGOSYANTE",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Arial",
+        "color": "#0068FF",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "01  /  THE NEGOSYANTE"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "01  /  THE NEGOSYANTE",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Arial",
+            "color": "#0068FF",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "01  /  THE NEGOSYANTE",
+              "fontSize": 17,
+              "typeface": "Arial",
+              "color": "#0068FF",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cj21wza9",
+      "id": "2",
+      "name": "s1-title",
+      "bbox": [
+        56,
+        86,
+        1168,
+        112
+      ],
+      "geometry": "rect",
+      "text": "He can afford the materials. He cannot afford to wait for payment.",
+      "textPreview": "He can afford the materials. He cannot afford to wait for payment.",
+      "resolvedFontSize": 49,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 49,
+        "typeface": "Arial",
+        "color": "#0B0F14",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "He can afford the materials. He cannot afford to"
+          },
+          {
+            "index": 2,
+            "text": "wait for payment."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "He can afford the materials. He cannot afford to wait for payment.",
+          "lineSpacingPercent": 94000,
+          "resolvedTextStyle": {
+            "fontSize": 49,
+            "typeface": "Arial",
+            "color": "#0B0F14",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 0.94
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "He can afford the materials. He cannot afford to wait for payment.",
+              "fontSize": 49,
+              "typeface": "Arial",
+              "color": "#0B0F14",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 0.94
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dkv254ru",
+      "id": "3",
+      "name": "s1-profile",
+      "bbox": [
+        56,
+        218,
+        1168,
+        34
+      ],
+      "geometry": "rect",
+      "text": "Urban small contractor  |  3 workers  |  daily material runs  |  paid through progress billing",
+      "textPreview": "Urban small contractor  |  3 workers  |  daily material runs  |  paid through progress billing",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Arial",
+        "color": "#59616D",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Urban small contractor  |  3 workers  |  daily material runs  |  paid through progress billing"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Urban small contractor  |  3 workers  |  daily material runs  |  paid through progress billing",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Arial",
+            "color": "#59616D",
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Urban small contractor  |  3 workers  |  daily material runs  |  paid through progress billing",
+              "fontSize": 22,
+              "typeface": "Arial",
+              "color": "#59616D",
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yl4jy9sf",
+      "id": "4",
+      "name": "s1-card-0",
+      "bbox": [
+        56,
+        286,
+        336,
+        230
+      ],
+      "geometry": "rect",
+      "fillColor": "#F1F3F5",
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zmdk7e90",
+      "id": "5",
+      "name": "s1-stat-0",
+      "bbox": [
+        84,
+        318,
+        280,
+        70
+      ],
+      "geometry": "rect",
+      "text": "PHP 8K",
+      "textPreview": "PHP 8K",
+      "resolvedFontSize": 51,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 51,
+        "typeface": "Arial",
+        "color": "#0068FF",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "PHP 8K"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "PHP 8K",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 51,
+            "typeface": "Arial",
+            "color": "#0068FF",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "PHP 8K",
+              "fontSize": 51,
+              "typeface": "Arial",
+              "color": "#0068FF",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/07ml0jal",
+      "id": "6",
+      "name": "s1-label-0",
+      "bbox": [
+        84,
+        396,
+        280,
+        54
+      ],
+      "geometry": "rect",
+      "text": "free OTC cash-in / month",
+      "textPreview": "free OTC cash-in / month",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "#0B0F14",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "free OTC cash-in /"
+          },
+          {
+            "index": 2,
+            "text": "month"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "free OTC cash-in / month",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Arial",
+            "color": "#0B0F14",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "free OTC cash-in / month",
+              "fontSize": 24,
+              "typeface": "Arial",
+              "color": "#0B0F14",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/l8v29or6",
+      "id": "7",
+      "name": "s1-note-0",
+      "bbox": [
+        84,
+        460,
+        280,
+        40
+      ],
+      "geometry": "rect",
+      "text": "Then a 2% fee applies above the limit.",
+      "textPreview": "Then a 2% fee applies above the limit.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Arial",
+        "color": "#59616D",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Then a 2% fee applies above the"
+          },
+          {
+            "index": 2,
+            "text": "limit."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Then a 2% fee applies above the limit.",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Arial",
+            "color": "#59616D",
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Then a 2% fee applies above the limit.",
+              "fontSize": 17,
+              "typeface": "Arial",
+              "color": "#59616D",
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ep0jmpsb",
+      "id": "8",
+      "name": "s1-card-1",
+      "bbox": [
+        448,
+        286,
+        336,
+        230
+      ],
+      "geometry": "rect",
+      "fillColor": "#F1F3F5",
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fq9kva9g",
+      "id": "9",
+      "name": "s1-stat-1",
+      "bbox": [
+        476,
+        318,
+        280,
+        70
+      ],
+      "geometry": "rect",
+      "text": "PHP 100K",
+      "textPreview": "PHP 100K",
+      "resolvedFontSize": 51,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 51,
+        "typeface": "Arial",
+        "color": "#0068FF",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "PHP 100K"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "PHP 100K",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 51,
+            "typeface": "Arial",
+            "color": "#0068FF",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "PHP 100K",
+              "fontSize": 51,
+              "typeface": "Arial",
+              "color": "#0068FF",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/r6lg7ypg",
+      "id": "10",
+      "name": "s1-label-1",
+      "bbox": [
+        476,
+        396,
+        280,
+        54
+      ],
+      "geometry": "rect",
+      "text": "standard incoming limit",
+      "textPreview": "standard incoming limit",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "#0B0F14",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "standard incoming limit"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "standard incoming limit",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Arial",
+            "color": "#0B0F14",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "standard incoming limit",
+              "fontSize": 24,
+              "typeface": "Arial",
+              "color": "#0B0F14",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/q5cfytov",
+      "id": "11",
+      "name": "s1-note-1",
+      "bbox": [
+        476,
+        460,
+        280,
+        40
+      ],
+      "geometry": "rect",
+      "text": "A fully verified wallet can hit the ceiling quickly.",
+      "textPreview": "A fully verified wallet can hit the ceiling quickly.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Arial",
+        "color": "#59616D",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "A fully verified wallet can hit the"
+          },
+          {
+            "index": 2,
+            "text": "ceiling quickly."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "A fully verified wallet can hit the ceiling quickly.",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Arial",
+            "color": "#59616D",
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "A fully verified wallet can hit the ceiling quickly.",
+              "fontSize": 17,
+              "typeface": "Arial",
+              "color": "#59616D",
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ds3y9o76",
+      "id": "12",
+      "name": "s1-card-2",
+      "bbox": [
+        840,
+        286,
+        336,
+        230
+      ],
+      "geometry": "rect",
+      "fillColor": "#F1F3F5",
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/c7uh0j6l",
+      "id": "13",
+      "name": "s1-stat-2",
+      "bbox": [
+        868,
+        318,
+        280,
+        70
+      ],
+      "geometry": "rect",
+      "text": "WEEKS",
+      "textPreview": "WEEKS",
+      "resolvedFontSize": 51,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 51,
+        "typeface": "Arial",
+        "color": "#003C99",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "WEEKS"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "WEEKS",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 51,
+            "typeface": "Arial",
+            "color": "#003C99",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "WEEKS",
+              "fontSize": 51,
+              "typeface": "Arial",
+              "color": "#003C99",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/32lg3ep4",
+      "id": "14",
+      "name": "s1-label-2",
+      "bbox": [
+        868,
+        396,
+        280,
+        54
+      ],
+      "geometry": "rect",
+      "text": "of working-capital float",
+      "textPreview": "of working-capital float",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "#0B0F14",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "of working-capital float"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "of working-capital float",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Arial",
+            "color": "#0B0F14",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "of working-capital float",
+              "fontSize": 24,
+              "typeface": "Arial",
+              "color": "#0B0F14",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/21sfu9oj",
+      "id": "15",
+      "name": "s1-note-2",
+      "bbox": [
+        868,
+        460,
+        280,
+        40
+      ],
+      "geometry": "rect",
+      "text": "Materials are paid now; client cash arrives later.",
+      "textPreview": "Materials are paid now; client cash arrives later.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Arial",
+        "color": "#59616D",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Materials are paid now; client cash"
+          },
+          {
+            "index": 2,
+            "text": "arrives later."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Materials are paid now; client cash arrives later.",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Arial",
+            "color": "#59616D",
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Materials are paid now; client cash arrives later.",
+              "fontSize": 17,
+              "typeface": "Arial",
+              "color": "#59616D",
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/p43y5o7a",
+      "id": "16",
+      "name": "s1-consequence",
+      "bbox": [
+        56,
+        548,
+        1168,
+        94
+      ],
+      "geometry": "rect",
+      "fillColor": "#0B0F14",
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/43uxwj6p",
+      "id": "17",
+      "name": "s1-consequence-text",
+      "bbox": [
+        82,
+        574,
+        1116,
+        46
+      ],
+      "geometry": "rect",
+      "text": "So he hands out cash - and every purchase stays untracked, unprotected, and invisible to lenders.",
+      "textPreview": "So he hands out cash - and every purchase stays untracked, unprotected, and invisible to lenders.",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#FFFFFF",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "So he hands out cash - and every purchase stays untracked, unprotected, and"
+          },
+          {
+            "index": 2,
+            "text": "invisible to lenders."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "So he hands out cash - and every purchase stays untracked, unprotected, and invisible to lenders.",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#FFFFFF",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "So he hands out cash - and every purchase stays untracked, unprotected, and invisible to lenders.",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#FFFFFF",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fy1gzep8",
+      "id": "18",
+      "name": "footer-team-1",
+      "bbox": [
+        56,
+        676,
+        180,
+        18
+      ],
+      "geometry": "rect",
+      "text": "LOCKED-IN",
+      "textPreview": "LOCKED-IN",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 13,
+        "typeface": "Arial",
+        "color": "#59616D",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "LOCKED-IN"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "LOCKED-IN",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "typeface": "Arial",
+            "color": "#59616D",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "LOCKED-IN",
+              "fontSize": 13,
+              "typeface": "Arial",
+              "color": "#59616D",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

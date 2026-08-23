@@ -1,0 +1,558 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/y1aeqe",
+    "id": "y1aeqe",
+    "slide": 1,
+    "layoutId": "bca6ea76-f24f-49d2-8ff9-4c274f1801d3",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "3c1168aa-fc2d-44bc-ac42-34ad16dd9f65",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#FFFFFF",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Arial"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "bca6ea76-f24f-49d2-8ff9-4c274f1801d3",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "3c1168aa-fc2d-44bc-ac42-34ad16dd9f65",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "3c1168aa-fc2d-44bc-ac42-34ad16dd9f65",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gji94bq9",
+      "id": "1",
+      "name": "cover-team",
+      "bbox": [
+        56,
+        44,
+        300,
+        38
+      ],
+      "geometry": "rect",
+      "text": "LOCKED-IN",
+      "textPreview": "LOCKED-IN",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "#0068FF",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "LOCKED-IN"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "LOCKED-IN",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Arial",
+            "color": "#0068FF",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "LOCKED-IN",
+              "fontSize": 24,
+              "typeface": "Arial",
+              "color": "#0068FF",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fi98b69o",
+      "id": "2",
+      "name": "cover-title",
+      "bbox": [
+        56,
+        174,
+        770,
+        244
+      ],
+      "geometry": "rect",
+      "text": "GCash\nTeamLine",
+      "textPreview": "GCash | TeamLine",
+      "resolvedFontSize": 86,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 86,
+        "typeface": "Arial",
+        "color": "#0B0F14",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "GCash"
+          },
+          {
+            "index": 2,
+            "text": "TeamLine"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "GCash",
+          "lineSpacingPercent": 88000,
+          "resolvedTextStyle": {
+            "fontSize": 86,
+            "typeface": "Arial",
+            "color": "#0B0F14",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 0.88
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "GCash",
+              "fontSize": 86,
+              "typeface": "Arial",
+              "color": "#0B0F14",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 0.88
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "TeamLine",
+          "lineSpacingPercent": 88000,
+          "resolvedTextStyle": {
+            "fontSize": 86,
+            "typeface": "Arial",
+            "color": "#0B0F14",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 0.88
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "TeamLine",
+              "fontSize": 86,
+              "typeface": "Arial",
+              "color": "#0B0F14",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 0.88
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/uh072183",
+      "id": "3",
+      "name": "cover-accent",
+      "bbox": [
+        930,
+        124,
+        230,
+        390
+      ],
+      "geometry": "rect",
+      "fillColor": "#0068FF",
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tg7q9wri",
+      "id": "4",
+      "name": "cover-accent-type",
+      "bbox": [
+        962,
+        170,
+        174,
+        250
+      ],
+      "geometry": "rect",
+      "text": "ONE LINE\nFOR THREE\nWORKERS",
+      "textPreview": "ONE LINE | FOR THREE | WORKERS",
+      "resolvedFontSize": 33,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 33,
+        "typeface": "Arial",
+        "color": "#FFFFFF",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 4,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ONE LINE"
+          },
+          {
+            "index": 2,
+            "text": "FOR"
+          },
+          {
+            "index": 3,
+            "text": "THREE"
+          },
+          {
+            "index": 4,
+            "text": "WORKERS"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ONE LINE",
+          "lineSpacingPercent": 92000,
+          "resolvedTextStyle": {
+            "fontSize": 33,
+            "typeface": "Arial",
+            "color": "#FFFFFF",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 0.92
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ONE LINE",
+              "fontSize": 33,
+              "typeface": "Arial",
+              "color": "#FFFFFF",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 0.92
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "FOR THREE",
+          "lineSpacingPercent": 92000,
+          "resolvedTextStyle": {
+            "fontSize": 33,
+            "typeface": "Arial",
+            "color": "#FFFFFF",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 0.92
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "FOR THREE",
+              "fontSize": 33,
+              "typeface": "Arial",
+              "color": "#FFFFFF",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 0.92
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "WORKERS",
+          "lineSpacingPercent": 92000,
+          "resolvedTextStyle": {
+            "fontSize": 33,
+            "typeface": "Arial",
+            "color": "#FFFFFF",
+            "bold": true,
+            "alignment": "left",
+            "lineSpacing": 0.92
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "WORKERS",
+              "fontSize": 33,
+              "typeface": "Arial",
+              "color": "#FFFFFF",
+              "bold": true,
+              "alignment": "left",
+              "lineSpacing": 0.92
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sfyp0rqd",
+      "id": "5",
+      "name": "cover-subtitle",
+      "bbox": [
+        56,
+        494,
+        650,
+        92
+      ],
+      "geometry": "rect",
+      "text": "Controlled purchasing today.\nA credit record tomorrow.",
+      "textPreview": "Controlled purchasing today. | A credit record tomorrow.",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 32,
+        "typeface": "Arial",
+        "color": "#59616D",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Controlled purchasing today."
+          },
+          {
+            "index": 2,
+            "text": "A credit record tomorrow."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Controlled purchasing today.",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Arial",
+            "color": "#59616D",
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Controlled purchasing today.",
+              "fontSize": 32,
+              "typeface": "Arial",
+              "color": "#59616D",
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "A credit record tomorrow.",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Arial",
+            "color": "#59616D",
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "A credit record tomorrow.",
+              "fontSize": 32,
+              "typeface": "Arial",
+              "color": "#59616D",
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7up87m9s",
+      "id": "6",
+      "name": "cover-event",
+      "bbox": [
+        56,
+        650,
+        570,
+        22
+      ],
+      "geometry": "rect",
+      "text": "ImaGnation 2026  |  GCash Innovation Challenge",
+      "textPreview": "ImaGnation 2026  |  GCash Innovation Challenge",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Arial",
+        "color": "#59616D",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "none",
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ImaGnation 2026  |  GCash Innovation Challenge"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ImaGnation 2026  |  GCash Innovation Challenge",
+          "lineSpacingPercent": 100000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Arial",
+            "color": "#59616D",
+            "alignment": "left",
+            "lineSpacing": 1
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ImaGnation 2026  |  GCash Innovation Challenge",
+              "fontSize": 16,
+              "typeface": "Arial",
+              "color": "#59616D",
+              "alignment": "left",
+              "lineSpacing": 1
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

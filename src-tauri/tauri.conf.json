@@ -14,8 +14,8 @@
       {
         "label": "main",
         "title": "Nibbles · Productivity Familiar",
-        "width": 360,
-        "height": 340,
+        "width": 320,
+        "height": 300,
         "center": true,
         "resizable": true,
         "maximizable": false,

@@ -1,0 +1,89 @@
+{"kind":"slide","id":"sl/y1aeqe","slide":1,"title":"LOCKED-IN","textShapes":5}
+{"kind":"textbox","id":"sh/gji94bq9","slide":1,"name":"cover-team","text":"LOCKED-IN","textPreview":"LOCKED-IN","textChars":9,"textLines":1,"bbox":[56,44,300,38]}
+{"kind":"textbox","id":"sh/fi98b69o","slide":1,"name":"cover-title","text":"GCash\nTeamLine","textPreview":"GCash | TeamLine","textChars":14,"textLines":2,"bbox":[56,174,770,244]}
+{"kind":"shape","id":"sh/uh072183","slide":1,"name":"cover-accent","bbox":[930,124,230,390]}
+{"kind":"textbox","id":"sh/tg7q9wri","slide":1,"name":"cover-accent-type","text":"ONE LINE\nFOR THREE\nWORKERS","textPreview":"ONE LINE | FOR THREE | WORKERS","textChars":26,"textLines":3,"bbox":[962,170,174,250]}
+{"kind":"textbox","id":"sh/sfyp0rqd","slide":1,"name":"cover-subtitle","text":"Controlled purchasing today.\nA credit record tomorrow.","textPreview":"Controlled purchasing today. | A credit record tomorrow.","textChars":54,"textLines":2,"bbox":[56,494,650,92]}
+{"kind":"textbox","id":"sh/7up87m9s","slide":1,"name":"cover-event","text":"ImaGnation 2026  |  GCash Innovation Challenge","textPreview":"ImaGnation 2026  |  GCash Innovation Challenge","textChars":46,"textLines":1,"bbox":[56,650,570,22]}
+{"kind":"notes","id":"nt/y1aeqe","slide":1,"text":"[Sources]\n- User-provided concept brief, 23 Aug 2026."}
+{"kind":"slide","id":"sl/tsfz6p","slide":2,"title":"01  /  THE NEGOSYANTE","textShapes":14}
+{"kind":"textbox","id":"sh/bitk3u9o","slide":2,"name":"kicker-01","text":"01  /  THE NEGOSYANTE","textPreview":"01  /  THE NEGOSYANTE","textChars":21,"textLines":1,"bbox":[56,36,520,28]}
+{"kind":"textbox","id":"sh/cj21wza9","slide":2,"name":"s1-title","text":"He can afford the materials. He cannot afford to wait for payment.","textPreview":"He can afford the materials. He cannot afford to wait for payment.","textChars":66,"textLines":1,"bbox":[56,86,1168,112]}
+{"kind":"textbox","id":"sh/dkv254ru","slide":2,"name":"s1-profile","text":"Urban small contractor  |  3 workers  |  daily material runs  |  paid through progress billing","textPreview":"Urban small contractor  |  3 workers  |  daily material runs  |  paid through progress billing","textChars":94,"textLines":1,"bbox":[56,218,1168,34]}
+{"kind":"shape","id":"sh/yl4jy9sf","slide":2,"name":"s1-card-0","bbox":[56,286,336,230]}
+{"kind":"textbox","id":"sh/zmdk7e90","slide":2,"name":"s1-stat-0","text":"PHP 8K","textPreview":"PHP 8K","textChars":6,"textLines":1,"bbox":[84,318,280,70]}
+{"kind":"textbox","id":"sh/07ml0jal","slide":2,"name":"s1-label-0","text":"free OTC cash-in / month","textPreview":"free OTC cash-in / month","textChars":24,"textLines":1,"bbox":[84,396,280,54]}
+{"kind":"textbox","id":"sh/l8v29or6","slide":2,"name":"s1-note-0","text":"Then a 2% fee applies above the limit.","textPreview":"Then a 2% fee applies above the limit.","textChars":38,"textLines":1,"bbox":[84,460,280,40]}
+{"kind":"shape","id":"sh/ep0jmpsb","slide":2,"name":"s1-card-1","bbox":[448,286,336,230]}
+{"kind":"textbox","id":"sh/fq9kva9g","slide":2,"name":"s1-stat-1","text":"PHP 100K","textPreview":"PHP 100K","textChars":8,"textLines":1,"bbox":[476,318,280,70]}
+{"kind":"textbox","id":"sh/r6lg7ypg","slide":2,"name":"s1-label-1","text":"standard incoming limit","textPreview":"standard incoming limit","textChars":23,"textLines":1,"bbox":[476,396,280,54]}
+{"kind":"textbox","id":"sh/q5cfytov","slide":2,"name":"s1-note-1","text":"A fully verified wallet can hit the ceiling quickly.","textPreview":"A fully verified wallet can hit the ceiling quickly.","textChars":52,"textLines":1,"bbox":[476,460,280,40]}
+{"kind":"shape","id":"sh/ds3y9o76","slide":2,"name":"s1-card-2","bbox":[840,286,336,230]}
+{"kind":"textbox","id":"sh/c7uh0j6l","slide":2,"name":"s1-stat-2","text":"WEEKS","textPreview":"WEEKS","textChars":5,"textLines":1,"bbox":[868,318,280,70]}
+{"kind":"textbox","id":"sh/32lg3ep4","slide":2,"name":"s1-label-2","text":"of working-capital float","textPreview":"of working-capital float","textChars":24,"textLines":1,"bbox":[868,396,280,54]}
+{"kind":"textbox","id":"sh/21sfu9oj","slide":2,"name":"s1-note-2","text":"Materials are paid now; client cash arrives later.","textPreview":"Materials are paid now; client cash arrives later.","textChars":50,"textLines":1,"bbox":[868,460,280,40]}
+{"kind":"shape","id":"sh/p43y5o7a","slide":2,"name":"s1-consequence","bbox":[56,548,1168,94]}
+{"kind":"textbox","id":"sh/43uxwj6p","slide":2,"name":"s1-consequence-text","text":"So he hands out cash - and every purchase stays untracked, unprotected, and invisible to lenders.","textPreview":"So he hands out cash - and every purchase stays untracked, unprotected, and invisible to lenders.","textChars":97,"textLines":1,"bbox":[82,574,1116,46]}
+{"kind":"textbox","id":"sh/fy1gzep8","slide":2,"name":"footer-team-1","text":"LOCKED-IN","textPreview":"LOCKED-IN","textChars":9,"textLines":1,"bbox":[56,676,180,18]}
+{"kind":"notes","id":"nt/tsfz6p","slide":2,"text":"[Sources]\n- GCash Help Center - Cash in fees: https://help.gcash.com/hc/fil/articles/360017595774-Cash-in-fees\n- GCash Help Center - Wallet and transaction limits: https://help.gcash.com/hc/en-us/articles/360021112894-What-are-my-GCash-wallet-and-transaction-limits\n- Contractor profile and progress-billing pattern: user-provided concept brief, 23 Aug 2026."}
+{"kind":"slide","id":"sl/crctdf","slide":3,"title":"02  /  THE INSIGHT","textShapes":18}
+{"kind":"textbox","id":"sh/y9wjax8b","slide":3,"name":"kicker-02","text":"02  /  THE INSIGHT","textPreview":"02  /  THE INSIGHT","textChars":18,"textLines":1,"bbox":[56,36,520,28]}
+{"kind":"textbox","id":"sh/lwnilc72","slide":3,"name":"s2-title","text":"The purchase trail can become the credit file.","textPreview":"The purchase trail can become the credit file.","textChars":46,"textLines":1,"bbox":[56,86,1168,66]}
+{"kind":"textbox","id":"sh/kbe1c7qh","slide":3,"name":"s2-thesis-a","text":"Stop moving his cash faster.","textPreview":"Stop moving his cash faster.","textChars":28,"textLines":1,"bbox":[56,176,550,46]}
+{"kind":"textbox","id":"sh/7yp0nmps","slide":3,"name":"s2-thesis-b","text":"Let workers spend controlled credit on his behalf.","textPreview":"Let workers spend controlled credit on his behalf.","textChars":50,"textLines":1,"bbox":[610,176,614,46]}
+{"kind":"shape","id":"sh/mxwjeh87","slide":3,"name":"s2-flow-line","bbox":[112,332,1010,4]}
+{"kind":"shape","id":"sh/9072pc7y","slide":3,"name":"s2-dot-0","bbox":[126,296,76,76]}
+{"kind":"textbox","id":"sh/8zy1grqd","slide":3,"name":"s2-num-0","text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[126,311,76,44]}
+{"kind":"textbox","id":"sh/v2pkrmp4","slide":3,"name":"s2-step-title-0","text":"DELEGATE","textPreview":"DELEGATE","textChars":8,"textLines":1,"bbox":[102,398,180,30]}
+{"kind":"textbox","id":"sh/u1gjihoj","slide":3,"name":"s2-step-body-0","text":"Owner assigns a worker limit.","textPreview":"Owner assigns a worker limit.","textChars":29,"textLines":1,"bbox":[102,440,214,72]}
+{"kind":"shape","id":"sh/0na9s7qp","slide":3,"name":"s2-dot-1","bbox":[404,296,76,76]}
+{"kind":"textbox","id":"sh/lojq1c7a","slide":3,"name":"s2-num-1","text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[404,311,76,44]}
+{"kind":"textbox","id":"sh/elsrqx8j","slide":3,"name":"s2-step-title-1","text":"PAY","textPreview":"PAY","textChars":3,"textLines":1,"bbox":[380,398,180,30]}
+{"kind":"textbox","id":"sh/zm18z2p4","slide":3,"name":"s2-step-body-1","text":"Worker scans a supplier QR.","textPreview":"Worker scans a supplier QR.","textChars":27,"textLines":1,"bbox":[380,440,214,72]}
+{"kind":"shape","id":"sh/8ru9w7ql","slide":3,"name":"s2-dot-2","bbox":[682,296,76,76]}
+{"kind":"textbox","id":"sh/9s3q5c76","slide":3,"name":"s2-num-2","text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[682,311,76,44]}
+{"kind":"textbox","id":"sh/mpsrux8v","slide":3,"name":"s2-step-title-2","text":"TAG","textPreview":"TAG","textChars":3,"textLines":1,"bbox":[658,398,180,30]}
+{"kind":"textbox","id":"sh/nq1832pg","slide":3,"name":"s2-step-body-2","text":"Purchase is linked to a project.","textPreview":"Purchase is linked to a project.","textChars":32,"textLines":1,"bbox":[658,440,214,72]}
+{"kind":"shape","id":"sh/wfu90rqx","slide":3,"name":"s2-dot-3","bbox":[960,296,76,76]}
+{"kind":"textbox","id":"sh/xg3a9w7i","slide":3,"name":"s2-num-3","text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[960,311,76,44]}
+{"kind":"textbox","id":"sh/5czqtczm","slide":3,"name":"s2-step-title-3","text":"GROW","textPreview":"GROW","textChars":4,"textLines":1,"bbox":[936,398,180,30]}
+{"kind":"textbox","id":"sh/4bq9k7i1","slide":3,"name":"s2-step-body-3","text":"Visible history supports a bigger line.","textPreview":"Visible history supports a bigger line.","textChars":39,"textLines":1,"bbox":[936,440,214,72]}
+{"kind":"shape","id":"sh/jah8rmhg","slide":3,"name":"s2-payoff","bbox":[56,548,1168,92]}
+{"kind":"textbox","id":"sh/i98rih0v","slide":3,"name":"s2-payoff-text","text":"Every purchase does two jobs: it buys materials today and proves creditworthiness tomorrow.","textPreview":"Every purchase does two jobs: it buys materials today and proves creditworthiness tomorrow.","textChars":91,"textLines":1,"bbox":[84,574,1112,42]}
+{"kind":"textbox","id":"sh/t0jqxwzi","slide":3,"name":"footer-team-2","text":"LOCKED-IN","textPreview":"LOCKED-IN","textChars":9,"textLines":1,"bbox":[56,676,180,18]}
+{"kind":"notes","id":"nt/crctdf","slide":3,"text":"[Sources]\n- Fuse privacy notice - transaction patterns and eligibility assessments: https://gcash.com/privacy-notice/fuse/ffi\n- GCash GLoan for Business terms - business transaction and Scan-To-Pay data: https://gcash.com/terms-and-conditions/gloan-for-business\n- Delegated-credit flywheel is the team's proposed concept."}
+{"kind":"slide","id":"sl/fh46dn","slide":4,"title":"03  /  THE CONCEPT","textShapes":23}
+{"kind":"textbox","id":"sh/0v69ozu1","slide":4,"name":"kicker-03","text":"03  /  THE CONCEPT","textPreview":"03  /  THE CONCEPT","textChars":18,"textLines":1,"bbox":[56,36,520,28]}
+{"kind":"textbox","id":"sh/zudsvudg","slide":4,"name":"s3-title","text":"GCash TeamLine splits one business credit line into controlled worker allowances.","textPreview":"GCash TeamLine splits one business credit line into controlled worker allowances.","textChars":81,"textLines":1,"bbox":[56,82,1168,106]}
+{"kind":"shape","id":"sh/yt4rm9cv","slide":4,"name":"s3-rail-left","bbox":[316,334,40,5]}
+{"kind":"shape","id":"sh/9kfa1ovi","slide":4,"name":"s3-rail-right","bbox":[848,334,40,5]}
+{"kind":"shape","id":"sh/8j69sjux","slide":4,"name":"s3-rail-down","bbox":[638,464,5,62]}
+{"kind":"shape","id":"sh/nyxszeds","slide":4,"name":"s3-owner","bbox":[56,240,260,224]}
+{"kind":"textbox","id":"sh/mxorq9c7","slide":4,"name":"s3-owner-label","text":"OWNER","textPreview":"OWNER","textChars":5,"textLines":1,"bbox":[82,266,208,24]}
+{"kind":"textbox","id":"sh/povqpkve","slide":4,"name":"s3-owner-title","text":"One business\ncredit line","textPreview":"One business | credit line","textChars":24,"textLines":2,"bbox":[82,306,208,82]}
+{"kind":"textbox","id":"sh/4nm9gfut","slide":4,"name":"s3-owner-body","text":"Sets worker caps, supplier rules, and instant freeze controls.","textPreview":"Sets worker caps, supplier rules, and instant freeze controls.","textChars":62,"textLines":1,"bbox":[82,400,208,52]}
+{"kind":"textbox","id":"sh/29o3ml43","slide":4,"name":"s3-new-label","text":"NEW: DELEGATED SUB-LINE","textPreview":"NEW: DELEGATED SUB-LINE","textChars":23,"textLines":1,"bbox":[356,210,492,24]}
+{"kind":"shape","id":"sh/naxkvql8","slide":4,"name":"s3-worker-0","bbox":[356,250,492,62]}
+{"kind":"textbox","id":"sh/ob6lovmt","slide":4,"name":"s3-worker-who-0","text":"WORKER 1","textPreview":"WORKER 1","textChars":8,"textLines":1,"bbox":[378,268,120,24]}
+{"kind":"textbox","id":"sh/pcfmx03e","slide":4,"name":"s3-worker-task-0","text":"Paint run","textPreview":"Paint run","textChars":9,"textLines":1,"bbox":[520,268,176,24]}
+{"kind":"textbox","id":"sh/ado3q54z","slide":4,"name":"s3-worker-cap-0","text":"PHP 3K","textPreview":"PHP 3K","textChars":6,"textLines":1,"bbox":[726,266,98,26]}
+{"kind":"shape","id":"sh/bex4zalk","slide":4,"name":"s3-worker-1","bbox":[356,326,492,62]}
+{"kind":"textbox","id":"sh/cz6lsfm5","slide":4,"name":"s3-worker-who-1","text":"WORKER 2","textPreview":"WORKER 2","textChars":8,"textLines":1,"bbox":[378,344,120,24]}
+{"kind":"textbox","id":"sh/x0zm103q","slide":4,"name":"s3-worker-task-1","text":"Lumber run","textPreview":"Lumber run","textChars":10,"textLines":1,"bbox":[520,344,176,24]}
+{"kind":"textbox","id":"sh/y183u5kv","slide":4,"name":"s3-worker-cap-1","text":"PHP 8K","textPreview":"PHP 8K","textChars":6,"textLines":1,"bbox":[726,342,98,26]}
+{"kind":"shape","id":"sh/z2h43alg","slide":4,"name":"s3-worker-2","bbox":[356,402,492,62]}
+{"kind":"textbox","id":"sh/v6hkba1o","slide":4,"name":"s3-worker-who-2","text":"WORKER 3","textPreview":"WORKER 3","textChars":8,"textLines":1,"bbox":[378,420,120,24]}
+{"kind":"textbox","id":"sh/u583i503","slide":4,"name":"s3-worker-task-2","text":"Fuel + fittings","textPreview":"Fuel + fittings","textChars":15,"textLines":1,"bbox":[520,420,176,24]}
+{"kind":"textbox","id":"sh/h8j2dkju","slide":4,"name":"s3-worker-cap-2","text":"PHP 2K","textPreview":"PHP 2K","textChars":6,"textLines":1,"bbox":[726,418,98,26]}
+{"kind":"shape","id":"sh/w7alkfi9","slide":4,"name":"s3-rails","bbox":[888,240,336,224]}
+{"kind":"textbox","id":"sh/72hkna1s","slide":4,"name":"s3-rails-label","text":"EXISTING GCASH RAILS","textPreview":"EXISTING GCASH RAILS","textChars":20,"textLines":1,"bbox":[914,266,284,24]}
+{"kind":"shape","id":"sh/m18je507","slide":4,"name":"s3-qr","bbox":[914,310,70,70]}
+{"kind":"textbox","id":"sh/94z29kji","slide":4,"name":"s3-qr-type","text":"QR","textPreview":"QR","textChars":2,"textLines":1,"bbox":[914,325,70,36]}
+{"kind":"textbox","id":"sh/83q1gfix","slide":4,"name":"s3-rails-title","text":"Merchant QR\nGCash for Business\nFuse lending + data","textPreview":"Merchant QR | GCash for Business | Fuse lending + data","textChars":50,"textLines":3,"bbox":[1004,306,194,82]}
+{"kind":"textbox","id":"sh/zexkjq1g","slide":4,"name":"s3-rails-body","text":"Worker selects TeamLine at checkout. The owner remains the borrower.","textPreview":"Worker selects TeamLine at checkout. The owner remains the borrower.","textChars":68,"textLines":1,"bbox":[914,404,284,42]}
+{"kind":"shape","id":"sh/ydojal0v","slide":4,"name":"s3-record","bbox":[244,526,792,90]}
+{"kind":"textbox","id":"sh/ojmhkryt","slide":4,"name":"s3-record-title","text":"ONE MONTHLY BILL  +  ONE PROJECT-TAGGED LEDGER","textPreview":"ONE MONTHLY BILL  +  ONE PROJECT-TAGGED LEDGER","textChars":46,"textLines":1,"bbox":[276,548,728,30]}
+{"kind":"textbox","id":"sh/pkvidwze","slide":4,"name":"s3-record-body","text":"Spend controls today; underwriting evidence tomorrow.","textPreview":"Spend controls today; underwriting evidence tomorrow.","textChars":53,"textLines":1,"bbox":[276,588,728,20]}
+{"kind":"textbox","id":"sh/2h4zi1gn","slide":4,"name":"s3-phase","text":"PHASE 1: registered merchant QRs  |  PHASE 2: help personal-QR neighborhood stores become GCash merchants","textPreview":"PHASE 1: registered merchant QRs  |  PHASE 2: help personal-QR neighborhood stores become GCash merchants","textChars":105,"textLines":1,"bbox":[56,642,1168,24]}
+{"kind":"textbox","id":"sh/3id0bmh8","slide":4,"name":"footer-team-3","text":"LOCKED-IN","textPreview":"LOCKED-IN","textChars":9,"textLines":1,"bbox":[56,676,180,18]}
+{"kind":"notes","id":"nt/fh46dn","slide":4,"text":"[Sources]\n- GCash Help Center - GCredit payment channels: https://help.gcash.com/hc/en-us/articles/360038858973-How-to-use-GCredit-to-pay\n- GCash GLoan for Business terms - Fuse, GCash for Business, and transaction data: https://gcash.com/terms-and-conditions/gloan-for-business\n- TeamLine, worker sub-lines, controls, tagging, settlement, and phasing are the team's proposed concept."}

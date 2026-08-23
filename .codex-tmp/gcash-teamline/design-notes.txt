@@ -1,0 +1,10 @@
+Communication job: By the end, GCash innovation judges should believe that an urban small contractor's cash-control and working-capital problems can be solved together because delegated, controlled purchasing creates the transaction trail needed for business credit.
+
+Revised narrative arc:
+1. Make the problem tangible through one workday: morning cash handoff, no control during the run, and receipt reconstruction at night. Close on the deeper working-capital and credit-visibility problem.
+2. Present the solution and value: controlled purchasing solves today's leakage while transaction data supports tomorrow's credit capacity.
+3. Show the product mechanics and feasibility: delegated sub-lines as one new primitive on top of existing merchant QR, GCash for Business, and Fuse lending/data rails.
+
+Visual route: Codex Grid. White canvas, black typography, pale gray evidence fields, GCash blue as the only strong accent. Title slide follows layout 01's sparse stacked hierarchy; slide 1 follows layout 19's metric-led evidence structure; slide 2 follows layout 17's horizontal process structure; slide 3 adapts layout 13 into a left-to-right system view with a restrained native-shape diagram.
+
+Output: 16:9 PowerPoint plus submission-ready PDF.

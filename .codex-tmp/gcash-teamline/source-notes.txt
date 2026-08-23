@@ -1,0 +1,13 @@
+User-provided source
+- LOCKED-IN ImaGnation: GCash Innovation Challenge - Concept Lock, supplied 23 August 2026.
+
+Official GCash sources
+- GCash wallet and transaction limits: https://help.gcash.com/hc/en-us/articles/360021112894-What-are-my-GCash-wallet-and-transaction-limits
+- GCash cash-in fees: https://help.gcash.com/hc/fil/articles/360017595774-Cash-in-fees
+- How to use GCredit to pay: https://help.gcash.com/hc/en-us/articles/360038858973-How-to-use-GCredit-to-pay
+- GLoan for Business terms and data fields: https://gcash.com/terms-and-conditions/gloan-for-business
+- Fuse privacy notice and transaction-pattern use: https://gcash.com/privacy-notice/fuse/ffi
+
+Claim discipline
+- The product, limits, allowances, project tags, merchant rules, freeze control, and phased merchant onboarding are proposals, not current GCash functionality.
+- Current product claims are limited to official GCash descriptions available on 23 August 2026.
