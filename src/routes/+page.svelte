@@ -5,7 +5,9 @@
 
   type Phase = "focus" | "break";
   type WatchMode = "whitelist" | "blacklist";
-  type MenuView = "settings" | "activity";
+  type MenuView = "settings" | "sound" | "activity";
+  type TickStyle = "soft" | "classic" | "wood";
+  type AmbientStyle = "moonlit" | "dreaming" | "deep";
   type LogFilter = "all" | Phase;
   type SessionLog = { phase: Phase; completed: boolean; endedAt: number; minutes: number; overtimeSeconds: number; actualSeconds?: number };
   type TrendDay = { key: number; label: string; focusMinutes: number; breakMinutes: number };
@@ -20,6 +22,11 @@
   ) as ReturnType<typeof getCurrentWindow>;
 
   const DEFAULT_RULES = ["Figma", "Google Docs", "Notion", "Visual Studio Code"];
+  const AMBIENT_PROFILES: Record<AmbientStyle, { waveform: OscillatorType; filter: number; secondsPerChord: number; chords: number[][] }> = {
+    moonlit: { waveform: "sine", filter: 1050, secondsPerChord: 7, chords: [[220, 261.63, 329.63], [196, 246.94, 293.66], [174.61, 220, 261.63], [196, 246.94, 329.63]] },
+    dreaming: { waveform: "triangle", filter: 820, secondsPerChord: 8, chords: [[174.61, 220, 277.18], [164.81, 207.65, 261.63], [146.83, 196, 246.94], [164.81, 220, 261.63]] },
+    deep: { waveform: "sine", filter: 610, secondsPerChord: 9, chords: [[110, 146.83, 174.61], [98, 130.81, 164.81], [87.31, 116.54, 146.83], [98, 130.81, 174.61]] }
+  };
 
   let phase = $state<Phase>("focus");
   let secondsLeft = $state(25 * 60);
@@ -42,6 +49,12 @@
   let finalPopEvery = $state(-1);
   let settingsOpen = $state(false);
   let menuView = $state<MenuView>("activity");
+  let tickEnabled = $state(true);
+  let breakMusicEnabled = $state(true);
+  let soundVolume = $state(32);
+  let tickStyle = $state<TickStyle>("soft");
+  let ambientStyle = $state<AmbientStyle>("moonlit");
+  let ambientPreviewing = $state(false);
 
   let activeTitle = $state("Waiting for a window…");
   let lastExternalTitle = $state("");
@@ -57,6 +70,13 @@
   let timerInterval: ReturnType<typeof setInterval> | null = null;
   let monitorInterval: ReturnType<typeof setInterval> | null = null;
   let previewTimeout: ReturnType<typeof setTimeout> | null = null;
+  let audioPreviewTimeout: ReturnType<typeof setTimeout> | null = null;
+  let ambientChordInterval: ReturnType<typeof setInterval> | null = null;
+  let audioContext: AudioContext | null = null;
+  let ambientMaster: GainNode | null = null;
+  let ambientVoices: OscillatorNode[] = [];
+  let ambientStarting = false;
+  let activeAmbientStyle: AmbientStyle | null = null;
 
   const effectiveStage = $derived(Math.max(dangerStage, previewStage));
   const monitorActive = $derived(running && phase === "focus");
@@ -107,10 +127,15 @@
 
   $effect(() => { appWindow.setTitle(`${displayTime} · ${indicatorLabel} · Nibbles`).catch(() => {}); });
   $effect(() => { void resizeForState(effectiveStage, settingsOpen); });
+  $effect(() => {
+    const shouldPlay = (running && phase === "break" && breakMusicEnabled) || ambientPreviewing;
+    void syncAmbientMusic(shouldPlay, ambientStyle, soundVolume);
+  });
 
   function toggleTimer() {
     resetPreview();
-    running ? pauseTimer() : (running = true);
+    if (running) pauseTimer();
+    else { running = true; void ensureAudioContext(); }
   }
   function pauseTimer() { running = false; isAllowed = true; clearDistraction(); }
   function stopTimer() {
@@ -156,6 +181,7 @@
     if (!running) return;
     if (phase === "focus" && !isAllowed) { advanceDistraction(); return; }
     if (phase === "focus") clearDistraction();
+    if (phase === "focus" && tickEnabled) void playTickSound();
     if (secondsLeft > 0) { phaseElapsedSeconds += 1; secondsLeft -= 1; return; }
     if (phase === "focus" && overtimeEnabled) {
       if (!phaseCompletionLogged) {
@@ -168,6 +194,114 @@
       phaseElapsedSeconds += 1; overtimeSeconds += 1; return;
     }
     finishPhase(true);
+  }
+
+  async function ensureAudioContext() {
+    try {
+      if (!audioContext) audioContext = new AudioContext();
+      if (audioContext.state === "suspended") await audioContext.resume();
+      return audioContext;
+    } catch { return null; }
+  }
+
+  async function playTickSound(force = false) {
+    if (!force && !tickEnabled) return;
+    const context = await ensureAudioContext(); if (!context) return;
+    const profiles: Record<TickStyle, { frequency: number; endFrequency: number; duration: number; waveform: OscillatorType; strength: number }> = {
+      soft: { frequency: 760, endFrequency: 610, duration: .045, waveform: "sine", strength: .1 },
+      classic: { frequency: 1380, endFrequency: 980, duration: .032, waveform: "square", strength: .075 },
+      wood: { frequency: 470, endFrequency: 240, duration: .075, waveform: "triangle", strength: .13 }
+    };
+    const profile = profiles[tickStyle];
+    const now = context.currentTime;
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    oscillator.type = profile.waveform;
+    oscillator.frequency.setValueAtTime(profile.frequency, now);
+    oscillator.frequency.exponentialRampToValueAtTime(profile.endFrequency, now + profile.duration);
+    gain.gain.setValueAtTime(.0001, now);
+    gain.gain.exponentialRampToValueAtTime(Math.max(.0001, soundVolume / 100 * profile.strength), now + .004);
+    gain.gain.exponentialRampToValueAtTime(.0001, now + profile.duration);
+    oscillator.connect(gain); gain.connect(context.destination);
+    oscillator.start(now); oscillator.stop(now + profile.duration + .01);
+    oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
+  }
+
+  async function syncAmbientMusic(shouldPlay: boolean, style: AmbientStyle, volume: number) {
+    if (!shouldPlay) { stopAmbientMusic(); return; }
+    if (ambientMaster && activeAmbientStyle !== style) stopAmbientMusic();
+    if (!ambientMaster) await startAmbientMusic(style, volume);
+    else updateAmbientVolume(volume);
+  }
+
+  async function startAmbientMusic(style: AmbientStyle, volume: number) {
+    if (ambientMaster || ambientStarting) return;
+    ambientStarting = true;
+    const context = await ensureAudioContext();
+    if (!context) { ambientStarting = false; return; }
+    const shouldStillPlay = (running && phase === "break" && breakMusicEnabled) || ambientPreviewing;
+    if (!shouldStillPlay) { ambientStarting = false; return; }
+
+    const profile = AMBIENT_PROFILES[style];
+    const master = context.createGain();
+    const filter = context.createBiquadFilter();
+    const now = context.currentTime;
+    filter.type = "lowpass"; filter.frequency.value = profile.filter; filter.Q.value = .55;
+    master.gain.setValueAtTime(.0001, now);
+    master.gain.exponentialRampToValueAtTime(Math.max(.0001, volume / 100 * .14), now + 1.5);
+    master.connect(filter); filter.connect(context.destination);
+
+    let chordIndex = 0;
+    const voices = profile.chords[0].map((frequency, index) => {
+      const oscillator = context.createOscillator();
+      const voiceGain = context.createGain();
+      oscillator.type = profile.waveform;
+      oscillator.frequency.value = frequency;
+      oscillator.detune.value = [-5, 2, 7][index] ?? 0;
+      voiceGain.gain.value = index === 0 ? .17 : .12;
+      oscillator.connect(voiceGain); voiceGain.connect(master); oscillator.start();
+      oscillator.onended = () => { oscillator.disconnect(); voiceGain.disconnect(); };
+      return oscillator;
+    });
+
+    ambientMaster = master;
+    ambientVoices = voices;
+    activeAmbientStyle = style;
+    ambientChordInterval = setInterval(() => {
+      if (!audioContext || !ambientMaster) return;
+      chordIndex = (chordIndex + 1) % profile.chords.length;
+      const changeAt = audioContext.currentTime;
+      ambientVoices.forEach((voice, index) => voice.frequency.setTargetAtTime(profile.chords[chordIndex][index], changeAt, 1.8));
+    }, profile.secondsPerChord * 1000);
+    ambientStarting = false;
+  }
+
+  function updateAmbientVolume(volume: number) {
+    if (!audioContext || !ambientMaster) return;
+    ambientMaster.gain.setTargetAtTime(Math.max(.0001, volume / 100 * .14), audioContext.currentTime, .08);
+  }
+
+  function stopAmbientMusic() {
+    if (ambientChordInterval) clearInterval(ambientChordInterval);
+    ambientChordInterval = null;
+    const context = audioContext;
+    const master = ambientMaster;
+    const voices = ambientVoices;
+    ambientMaster = null; ambientVoices = []; activeAmbientStyle = null;
+    if (!context || !master) return;
+    master.gain.cancelScheduledValues(context.currentTime);
+    master.gain.setTargetAtTime(.0001, context.currentTime, .09);
+    setTimeout(() => { voices.forEach((voice) => { try { voice.stop(); } catch {} }); master.disconnect(); }, 420);
+  }
+
+  async function previewTickSound() { await playTickSound(true); }
+  async function toggleAmbientPreview() {
+    if (audioPreviewTimeout) clearTimeout(audioPreviewTimeout);
+    audioPreviewTimeout = null;
+    if (ambientPreviewing) { ambientPreviewing = false; return; }
+    await ensureAudioContext();
+    ambientPreviewing = true;
+    audioPreviewTimeout = setTimeout(() => { ambientPreviewing = false; audioPreviewTimeout = null; }, 12000);
   }
 
   function advanceDistraction() {
@@ -259,7 +393,7 @@
   }
 
   function persistSettings() {
-    localStorage.setItem("nibbles-settings-v2", JSON.stringify({ watchMode, rules, growthEvery, minimizeAfter, finalPopEvery, focusMinutes, breakMinutes, overtimeEnabled, completedFocuses, sessionLogs }));
+    localStorage.setItem("nibbles-settings-v2", JSON.stringify({ watchMode, rules, growthEvery, minimizeAfter, finalPopEvery, focusMinutes, breakMinutes, overtimeEnabled, completedFocuses, sessionLogs, tickEnabled, breakMusicEnabled, soundVolume, tickStyle, ambientStyle }));
   }
   function restoreSettings() {
     try {
@@ -273,6 +407,11 @@
       if (Number.isFinite(data.focusMinutes)) focusMinutes = data.focusMinutes;
       if (Number.isFinite(data.breakMinutes)) breakMinutes = data.breakMinutes;
       if (typeof data.overtimeEnabled === "boolean") overtimeEnabled = data.overtimeEnabled;
+      if (typeof data.tickEnabled === "boolean") tickEnabled = data.tickEnabled;
+      if (typeof data.breakMusicEnabled === "boolean") breakMusicEnabled = data.breakMusicEnabled;
+      if (Number.isFinite(data.soundVolume)) soundVolume = Math.max(0, Math.min(100, data.soundVolume));
+      if (["soft", "classic", "wood"].includes(data.tickStyle)) tickStyle = data.tickStyle;
+      if (["moonlit", "dreaming", "deep"].includes(data.ambientStyle)) ambientStyle = data.ambientStyle;
       if (Number.isFinite(data.completedFocuses)) completedFocuses = data.completedFocuses;
       if (Array.isArray(data.sessionLogs)) sessionLogs = data.sessionLogs.slice(0, 100);
       secondsLeft = focusMinutes * 60;
@@ -347,7 +486,14 @@
     restoreSettings(); appWindow.isAlwaysOnTop().then((value) => (pinned = value)).catch(() => {});
     timerInterval = setInterval(tick, 1000); monitorInterval = setInterval(pollForegroundWindow, 600); void pollForegroundWindow();
   });
-  onDestroy(() => { if (timerInterval) clearInterval(timerInterval); if (monitorInterval) clearInterval(monitorInterval); if (previewTimeout) clearTimeout(previewTimeout); });
+  onDestroy(() => {
+    if (timerInterval) clearInterval(timerInterval);
+    if (monitorInterval) clearInterval(monitorInterval);
+    if (previewTimeout) clearTimeout(previewTimeout);
+    if (audioPreviewTimeout) clearTimeout(audioPreviewTimeout);
+    stopAmbientMusic();
+    if (audioContext) void audioContext.close();
+  });
 </script>
 
 <svelte:head>
@@ -369,10 +515,11 @@
     {#if settingsOpen}
       <div class="settings-panel">
         <header class="settings-header">
-          <div class="menu-title"><p class="kicker">NIBBLES</p><h1>{menuView === "settings" ? "Ritual settings" : "Focus activity"}</h1></div>
+          <div class="menu-title"><p class="kicker">NIBBLES</p><h1>{menuView === "settings" ? "Ritual settings" : menuView === "sound" ? "Sound settings" : "Focus activity"}</h1></div>
           <div class="settings-tools">
             <div class="menu-tabs" role="tablist" aria-label="Menu sections">
               <button role="tab" class:active={menuView === "settings"} onclick={() => (menuView = "settings")} aria-label="Settings" aria-selected={menuView === "settings"} aria-controls="settings-view" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 13.5v-3l-2-.7a7 7 0 0 0-.7-1.6l.9-1.9-2.1-2.1-1.9.9a7 7 0 0 0-1.7-.7L10.8 2h-3l-.7 2.4a7 7 0 0 0-1.7.7l-1.9-.9-2.1 2.1.9 1.9a7 7 0 0 0-.7 1.6l-2 .7v3l2 .7a7 7 0 0 0 .7 1.6l-.9 1.9 2.1 2.1 1.9-.9a7 7 0 0 0 1.7.7l.7 2.4h3l.7-2.4a7 7 0 0 0 1.7-.7l1.9.9 2.1-2.1-.9-1.9a7 7 0 0 0 .7-1.6Z" transform="translate(2.2 0) scale(.82)"/></svg></button>
+              <button role="tab" class:active={menuView === "sound"} onclick={() => (menuView = "sound")} aria-label="Sound settings" aria-selected={menuView === "sound"} aria-controls="sound-view" title="Sound settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.2a4 4 0 0 1 0 5.6M17.7 6.5a7.7 7.7 0 0 1 0 11"/></svg></button>
               <button role="tab" class:active={menuView === "activity"} onclick={() => (menuView = "activity")} aria-label="Focus activity" aria-selected={menuView === "activity"} aria-controls="activity-view" title="Focus activity"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V11M12 19V5M19 19v-7"/><path d="M3 19h18"/></svg></button>
             </div>
             <button class="icon-button visible" onclick={toggleSettings} aria-label="Close menu" title="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" /></svg></button>
@@ -419,6 +566,50 @@
             </section>
 
             <div class="form-preview" aria-label="Preview warning forms"><span>Preview forms</span>{#each [0, 1, 2, 3] as stage}<button onclick={() => previewForm(stage)} aria-label={`Preview form ${stage + 1}`}>{stage + 1}</button>{/each}</div>
+          </div>
+        {:else if menuView === "sound"}
+          <div class="menu-view sound-view" id="sound-view" role="tabpanel" aria-label="Sound settings">
+            <div class="sound-intro">
+              <span aria-hidden="true"><svg viewBox="0 0 28 28"><path d="M6 11v6h4l5 4V7l-5 4H6Z"/><path d="M19 10a6 6 0 0 1 0 8M22 7a10 10 0 0 1 0 14"/></svg></span>
+              <div><h2>A rhythm for every ritual</h2><p>Quiet ticks for focus. A soft, shifting soundscape for breaks.</p></div>
+            </div>
+
+            <section class="sound-card">
+              <header class="sound-card-heading">
+                <span class="sound-kind focus-sound" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span>
+                <span><strong>Focus ticking</strong><small>Only while productive time is moving.</small></span>
+                <input type="checkbox" bind:checked={tickEnabled} onchange={persistSettings} aria-label="Enable focus ticking" />
+              </header>
+              <div class="sound-controls">
+                <label><span>Character</span><select bind:value={tickStyle} onchange={persistSettings} disabled={!tickEnabled}><option value="soft">Soft</option><option value="classic">Classic clock</option><option value="wood">Warm wood</option></select></label>
+                <button class="sound-preview" onclick={previewTickSound} disabled={!tickEnabled || soundVolume === 0} aria-label="Preview ticking sound" title="Preview tick"><svg class="filled-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 9 6-9 6Z"/></svg></button>
+              </div>
+            </section>
+
+            <section class="sound-card">
+              <header class="sound-card-heading">
+                <span class="sound-kind break-sound" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17.5 16.5A8 8 0 0 1 7.5 6.5a8 8 0 1 0 10 10Z"/><path d="m17 6 .4 1.2L19 8l-1.6.8L17 10l-.4-1.2L15 8l1.6-.8L17 6Z"/></svg></span>
+                <span><strong>Break soundscape</strong><small>Calm music during the break phase.</small></span>
+                <input type="checkbox" bind:checked={breakMusicEnabled} onchange={persistSettings} aria-label="Enable break music" />
+              </header>
+              <div class="sound-controls">
+                <label><span>Mood</span><select bind:value={ambientStyle} onchange={persistSettings} disabled={!breakMusicEnabled}><option value="moonlit">Moonlit</option><option value="dreaming">Dreaming</option><option value="deep">Deep quiet</option></select></label>
+                <button class:active={ambientPreviewing} class="sound-preview" onclick={toggleAmbientPreview} disabled={!breakMusicEnabled || soundVolume === 0} aria-label={ambientPreviewing ? "Stop break music preview" : "Preview break music"} title={ambientPreviewing ? "Stop preview" : "Preview music"}>
+                  {#if ambientPreviewing}<svg class="filled-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="8" height="8" rx="1.5"/></svg>{:else}<svg class="filled-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 9 6-9 6Z"/></svg>{/if}
+                </button>
+              </div>
+            </section>
+
+            <section class="volume-card">
+              <div class="volume-heading"><span>Master volume</span><output>{soundVolume}%</output></div>
+              <div class="volume-control">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.5a3.5 3.5 0 0 1 0 5"/></svg>
+                <input type="range" min="0" max="100" step="1" bind:value={soundVolume} oninput={persistSettings} aria-label="Master sound volume" />
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 3V7l-4 3H5Z"/><path d="M15 9.5a3.5 3.5 0 0 1 0 5M17.5 7a7 7 0 0 1 0 10"/></svg>
+              </div>
+            </section>
+
+            <p class="sound-note"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.5a6.5 6.5 0 1 0 6.5 6.5M10 7v3.5M10 14h.01"/></svg>Ticks stop during distractions and pauses. Break music fades out when focus resumes.</p>
           </div>
         {:else}
           <div class="menu-view stats-section activity-view" id="activity-view" role="tabpanel" aria-label="Focus activity">
@@ -613,6 +804,38 @@
   .toggle-row b { font-family: Georgia, "Times New Roman", serif; font-size: .96rem; }
   .toggle-row small { margin-top: 2px; color: #a08b8e; font-size: .7rem; }
   .toggle-row input { width: 31px; height: 17px; accent-color: #932f4a; }
+  .sound-view { padding: 11px 3px 5px 0; }
+  .sound-intro { display: flex; align-items: center; gap: 12px; padding: 8px 5px 15px; }
+  .sound-intro > span { display: grid; width: 42px; height: 42px; flex: 0 0 auto; place-items: center; border: 1px solid rgba(245,121,139,.14); border-radius: 14px; background: radial-gradient(circle at 35% 30%, rgba(177,53,81,.3), rgba(67,15,40,.24)); color: #e06679; box-shadow: inset 0 1px rgba(255,255,255,.04), 0 8px 22px rgba(0,0,0,.17); }
+  .sound-intro svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
+  .sound-intro h2 { font-size: 1.08rem; }
+  .sound-intro p { margin: 3px 0 0; color: #9e888d; font-size: .7rem; line-height: 1.4; }
+  .sound-card { margin-bottom: 9px; padding: 12px; border: 1px solid rgba(255,255,255,.06); border-radius: 15px; background: linear-gradient(145deg, rgba(255,255,255,.035), rgba(0,0,0,.09)); }
+  .sound-card-heading { display: grid; grid-template-columns: 35px minmax(0,1fr) auto; align-items: center; gap: 9px; }
+  .sound-kind { display: grid; width: 35px; height: 35px; place-items: center; border-radius: 11px; }
+  .sound-kind svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
+  .focus-sound { background: rgba(165,39,67,.15); color: #ed5a73; }
+  .break-sound { background: rgba(91,136,121,.14); color: #91b9aa; }
+  .sound-card-heading > span:nth-child(2), .sound-card-heading strong, .sound-card-heading small { display: block; min-width: 0; }
+  .sound-card-heading strong { color: #e3cecb; font-family: Georgia, "Times New Roman", serif; font-size: .91rem; font-weight: 600; }
+  .sound-card-heading small { overflow: hidden; margin-top: 2px; color: #917a80; font-size: .64rem; text-overflow: ellipsis; white-space: nowrap; }
+  .sound-card-heading input { width: 31px; height: 17px; accent-color: #9b304c; }
+  .sound-controls { display: grid; grid-template-columns: 1fr 33px; gap: 7px; margin-top: 10px; }
+  .sound-controls label { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; min-width: 0; padding: 6px 8px 6px 10px; border: 1px solid rgba(255,255,255,.055); border-radius: 10px; background: rgba(0,0,0,.13); color: #a78f94; font-size: .7rem; }
+  .sound-controls select { max-width: 116px; padding: 5px 7px; border-radius: 7px; color: #d8c1bf; font-size: .69rem; }
+  .sound-controls select:disabled { opacity: .45; }
+  .sound-preview { display: grid; width: 33px; height: 33px; padding: 0; place-items: center; border: 1px solid rgba(255,255,255,.08); border-radius: 10px; background: rgba(107,27,50,.34); color: #dca9ae; transition: 130ms ease; }
+  .sound-preview:hover, .sound-preview:focus-visible, .sound-preview.active { border-color: rgba(239,102,122,.28); background: rgba(143,37,61,.62); color: #fff0eb; }
+  .sound-preview:disabled { cursor: default; opacity: .32; }
+  .sound-preview svg { width: 15px; height: 15px; fill: currentColor; stroke: none; }
+  .volume-card { padding: 12px 13px; border: 1px solid rgba(255,255,255,.055); border-radius: 15px; background: rgba(0,0,0,.1); }
+  .volume-heading { display: flex; align-items: center; justify-content: space-between; color: #b9a1a2; font-size: .7rem; font-weight: 700; }
+  .volume-heading output { color: #e3c8c7; font-variant-numeric: tabular-nums; }
+  .volume-control { display: grid; grid-template-columns: 17px 1fr 17px; align-items: center; gap: 8px; margin-top: 8px; color: #876c74; }
+  .volume-control svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.45; stroke-linecap: round; stroke-linejoin: round; }
+  .volume-control input { width: 100%; height: 4px; padding: 0; border: 0; border-radius: 999px; outline: 0; background: rgba(255,255,255,.09); accent-color: #c84261; }
+  .sound-note { display: flex; align-items: flex-start; gap: 7px; margin: 11px 6px 0; color: #806c72; font-size: .62rem; line-height: 1.4; }
+  .sound-note svg { width: 15px; height: 15px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; }
   .stats-section { padding: 10px 3px 6px 0; }
   .activity-view .trend-chart { height: 124px; }
   .activity-view .log-list { max-height: 300px; }
