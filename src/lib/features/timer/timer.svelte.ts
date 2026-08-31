@@ -89,15 +89,18 @@ export class TimerStore {
   }
 
   stop(config: TimerConfig): SessionUpdate | undefined {
-    // Stop records meaningful partial work, but an untouched idle timer creates no log.
-    const hasSession = this.running || this.phaseElapsedSeconds > 0 || this.overtimeSeconds > 0 || this.phaseCompletionLogged;
-    const session = hasSession ? this.finishPhase(false, config) : undefined;
-    this.reset(config);
-    return session;
-  }
+    const hasSession =
+      this.running ||
+      this.phaseElapsedSeconds > 0 ||
+      this.overtimeSeconds > 0 ||
+      this.phaseCompletionLogged;
 
-  skip(config: TimerConfig): SessionUpdate {
-    return this.finishPhase(this.secondsLeft === 0, config);
+    const session = hasSession
+      ? this.finishPhase(true, config)
+      : undefined;
+
+    this.running = false;
+    return session;
   }
 
   private finishPhase(completed: boolean, config: TimerConfig): SessionUpdate {

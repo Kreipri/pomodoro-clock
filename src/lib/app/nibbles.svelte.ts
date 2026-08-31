@@ -103,16 +103,6 @@ export class NibblesApp {
     this.syncWindowTitle();
   };
 
-  skipPhase = (): void => {
-    // TimerStore decides whether a zero-second phase counts as completed.
-    this.activity.record(this.timer.skip(this.settings.timerConfig));
-    this.distraction.clear();
-    this.persist();
-    this.syncAmbientAudio();
-    this.syncWindowState();
-    this.syncWindowTitle();
-  };
-
   setWatchMode = (mode: WatchMode): void => {
     // Re-evaluate immediately so the UI does not wait for the next monitor poll.
     this.settings.setWatchMode(mode);
