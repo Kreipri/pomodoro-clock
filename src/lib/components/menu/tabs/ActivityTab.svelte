@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { LogFilter, SessionLog, TrendDay } from "$lib/features/activity/types";
 
+  /** Precomputed store values keep this component limited to chart/list presentation. */
   type Props = {
     trendChange: number;
     trendDays: TrendDay[];
@@ -30,6 +31,7 @@
 </script>
 
 <div class="menu-view stats-section activity-view" id="activity-view" role="tabpanel" aria-label="Focus activity">
+  <!-- Seven-day direction and headline statistics -->
   <div class="section-heading activity-heading">
     <div><p class="section-kicker">LAST 7 DAYS</p><h2>Your week</h2></div>
     <span class:trend-up={trendChange > 0} class:trend-down={trendChange < 0} class="trend-change" title="Recent three days compared with the prior three days">
@@ -47,6 +49,7 @@
     <div><span>Completion</span><strong>{weekCompletionRate}%</strong></div>
   </div>
 
+  <!-- Paired focus/break bars share the same maximum for meaningful comparison. -->
   <div class="trend-chart" role="img" aria-label={`Seven-day chart: ${formatTrendMinutes(weekFocusMinutes)} focused and ${formatTrendMinutes(weekBreakMinutes)} on breaks`}>
     {#each trendDays as day}
       <div class="trend-day">
@@ -61,6 +64,7 @@
   </div>
   <div class="trend-legend" aria-hidden="true"><span><i class="focus-key"></i>Focus</span><span><i class="break-key"></i>Break</span></div>
 
+  <!-- Filter controls and the latest twelve matching session records -->
   <div class="session-heading">
     <h3>Sessions</h3>
     <div class="log-filters" role="group" aria-label="Filter sessions">
@@ -88,6 +92,7 @@
 </div>
 
 <style>
+  /* Summary cards and seven-day chart */
   .menu-view { min-height: 0; flex: 1 1 auto; padding-right: 3px; overflow: auto; scrollbar-width: thin; scrollbar-color: #633048 transparent; }
   .stats-section { padding: 10px 3px 6px 0; }
   .activity-view .trend-chart { height: 124px; }
@@ -117,6 +122,7 @@
   .trend-legend i { width: 5px; height: 5px; border-radius: 50%; }
   .trend-legend .focus-key { background: #ed4e68; box-shadow: 0 0 5px rgba(237,78,104,.35); }
   .trend-legend .break-key { background: #87ad9e; }
+  /* Session filters, empty state, and scrollable log */
   .session-heading { display: flex; align-items: center; justify-content: space-between; margin: 0 0 7px; }
   .session-heading h3 { margin: 0; color: #d9c1bf; font-family: Georgia, "Times New Roman", serif; font-size: 1rem; font-weight: 600; }
   .log-filters { display: flex; gap: 4px; padding: 3px; border-radius: 999px; background: rgba(0,0,0,.2); }

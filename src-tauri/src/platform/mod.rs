@@ -1,3 +1,6 @@
+//! Cross-platform foreground-window interface.
+//! Add another OS implementation here without changing command handlers.
+
 #[cfg(target_os = "windows")]
 mod windows;
 
@@ -6,6 +9,7 @@ pub use windows::{foreground_window_title, minimize_foreground_window};
 
 #[cfg(not(target_os = "windows"))]
 pub fn foreground_window_title() -> String {
+    // Unsupported platforms fail safely: the frontend treats an empty result as allowed.
     String::new()
 }
 

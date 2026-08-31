@@ -2,6 +2,7 @@
   import type { Phase } from "$lib/features/timer/types";
   import type { RitualSettingsPatch, WatchMode } from "$lib/features/settings/types";
 
+  /** Data comes from SettingsStore; callbacks describe user intent to NibblesApp. */
   type Props = {
     watchMode: WatchMode;
     rules: string[];
@@ -38,6 +39,7 @@
 </script>
 
 <div class="menu-view settings-view" id="settings-view" role="tabpanel" aria-label="Settings">
+  <!-- Foreground-window matching rules -->
   <section class="setting-section first-section">
     <div class="section-heading"><h2>Window rules</h2><span class:status-live={detectionSupported}><i></i>{detectionSupported ? "watching" : "desktop only"}</span></div>
     <div class="mode-switch" role="group" aria-label="Window rule mode">
@@ -57,6 +59,7 @@
     {/if}
   </section>
 
+  <!-- Focus/break duration and overtime behavior -->
   <section class="setting-section">
     <div class="section-heading"><h2>Timer</h2><span>minutes</span></div>
     <div class="settings-grid timer-grid">
@@ -66,6 +69,7 @@
     <label class="toggle-row"><span><b>Flow overtime</b><small>Keep counting when focus ends.</small></span><input type="checkbox" checked={overtimeEnabled} onchange={(event) => onSettingsChange({ overtimeEnabled: event.currentTarget.checked })} /></label>
   </section>
 
+  <!-- Timing of escalating creature and native window responses -->
   <section class="setting-section">
     <div class="section-heading"><h2>Distraction response</h2><span>forms 2–4</span></div>
     <div class="settings-grid response-grid">
@@ -75,10 +79,12 @@
     </div>
   </section>
 
+  <!-- Preview is temporary and does not affect real distraction state. -->
   <div class="form-preview" aria-label="Preview warning forms"><span>Preview forms</span>{#each [0, 1, 2, 3] as stage}<button onclick={() => onPreviewForm(stage)} aria-label={`Preview form ${stage + 1}`}>{stage + 1}</button>{/each}</div>
 </div>
 
 <style>
+  /* Scroll container and repeated settings-section layout */
   .menu-view { min-height: 0; flex: 1 1 auto; padding-right: 3px; overflow: auto; scrollbar-width: thin; scrollbar-color: #633048 transparent; }
   .setting-section { padding: 13px 0; border-top: 1px solid rgba(255,255,255,.06); }
   .setting-section.first-section { padding-top: 9px; border-top: 0; }
@@ -93,6 +99,7 @@
   .mode-switch button { padding: 7px; border-radius: 999px; background: transparent; color: #a88d91; font-size: .82rem; }
   .mode-switch button.chosen { background: linear-gradient(120deg,#7f2941,#4e182f); color: #fff0e9; box-shadow: 0 3px 12px rgba(57,5,24,.35); }
   .help-copy { margin: 5px 0 9px; color: #a38b8f; font-size: .82rem; line-height: 1.38; }
+  /* Rule input, removable chips, and last-observed title */
   .rule-entry { display: grid; grid-template-columns: 1fr 34px; gap: 6px; }
   input, select { min-width: 0; border: 1px solid rgba(255,255,255,.08); outline: 0; background: rgba(0,0,0,.25); color: #f1dcda; }
   input:focus, select:focus { border-color: rgba(207,79,102,.55); box-shadow: 0 0 0 3px rgba(159,37,64,.13); }
@@ -106,6 +113,7 @@
   .observed-title span { min-width: 0; overflow: hidden; font-size: .58rem; text-overflow: ellipsis; white-space: nowrap; }
   .observed-title small { display: block; margin-bottom: 1px; color: #87636d; font-size: .45rem; font-weight: 800; letter-spacing: .12em; }
   .observed-title > svg { flex: 0 0 auto; color: #d58b99; }
+  /* Timer and distraction-response form grids */
   .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px; }
   .settings-grid label { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 4px; padding: 8px 9px; border: 1px solid rgba(255,255,255,.055); border-radius: 11px; color: #b79fa0; font-size: .77rem; }
   .response-grid { grid-template-columns: 1fr 1fr; }

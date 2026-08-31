@@ -7,12 +7,14 @@ type AmbientProfile = {
   chords: number[][];
 };
 
+// Add or tune break moods here. Chords contain one frequency per oscillator voice.
 const AMBIENT_PROFILES: Record<AmbientStyle, AmbientProfile> = {
   moonlit: { waveform: "sine", filter: 1050, secondsPerChord: 7, chords: [[220, 261.63, 329.63], [196, 246.94, 293.66], [174.61, 220, 261.63], [196, 246.94, 329.63]] },
   dreaming: { waveform: "triangle", filter: 820, secondsPerChord: 8, chords: [[174.61, 220, 277.18], [164.81, 207.65, 261.63], [146.83, 196, 246.94], [164.81, 220, 261.63]] },
   deep: { waveform: "sine", filter: 610, secondsPerChord: 9, chords: [[110, 146.83, 174.61], [98, 130.81, 164.81], [87.31, 116.54, 146.83], [98, 130.81, 174.61]] }
 };
 
+/** One running ambient soundscape; AudioEngine owns its lifecycle. */
 export class AmbientSynth {
   readonly style: AmbientStyle;
   private readonly context: AudioContext;
@@ -28,6 +30,7 @@ export class AmbientSynth {
     this.master = context.createGain();
     const now = context.currentTime;
 
+    // A low-pass filter softens the raw oscillator harmonics into background ambience.
     filter.type = "lowpass";
     filter.frequency.value = profile.filter;
     filter.Q.value = .55;
@@ -52,6 +55,7 @@ export class AmbientSynth {
     });
 
     let chordIndex = 0;
+    // Frequencies glide to the next chord rather than switching abruptly.
     this.chordInterval = setInterval(() => {
       chordIndex = (chordIndex + 1) % profile.chords.length;
       const changeAt = context.currentTime;
@@ -68,6 +72,7 @@ export class AmbientSynth {
     this.chordInterval = null;
     this.master.gain.cancelScheduledValues(this.context.currentTime);
     this.master.gain.setTargetAtTime(.0001, this.context.currentTime, .09);
+    // Allow the gain fade to finish before stopping and disconnecting the voices.
     setTimeout(() => {
       this.voices.forEach((voice) => { try { voice.stop(); } catch { /* Voice already stopped. */ } });
       this.master.disconnect();

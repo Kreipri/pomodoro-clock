@@ -3,16 +3,24 @@ import { formatClock, phaseDurationSeconds, timerProgress } from "./timer";
 import type { Phase, TimerConfig } from "./types";
 
 export type TimerTickResult = {
+  // The controller performs audio side effects; the store only requests them.
   playFocusTick: boolean;
+  // Present when this tick completed or updated a session record.
   session?: SessionUpdate;
 };
 
+/**
+ * Owns the focus/break state machine and elapsed-time accounting.
+ * It does not persist data, play audio, or know why a tick may be blocked.
+ */
 export class TimerStore {
+  // `secondsLeft` counts down; overtime has a separate upward counter.
   phase = $state<Phase>("focus");
   secondsLeft = $state(25 * 60);
   overtimeSeconds = $state(0);
   running = $state(false);
   phaseElapsedSeconds = $state(0);
+  // Prevents a completed focus from being counted again on every overtime tick.
   phaseCompletionLogged = $state(false);
 
   get isOvertime() { return this.phase === "focus" && this.secondsLeft === 0; }
@@ -37,6 +45,7 @@ export class TimerStore {
   pause(): void { this.running = false; }
 
   reset(config: TimerConfig): void {
+    // A full reset always returns to a fresh, stopped focus phase.
     this.running = false;
     this.phase = "focus";
     this.secondsLeft = phaseDurationSeconds("focus", config);
@@ -46,6 +55,7 @@ export class TimerStore {
   }
 
   syncDuration(phase: Phase, minutes: number): void {
+    // Never jump a running countdown when the user edits future durations.
     if (!this.running && this.phase === phase) this.secondsLeft = minutes * 60;
   }
 
@@ -60,6 +70,7 @@ export class TimerStore {
     }
 
     if (this.phase === "focus" && config.overtimeEnabled) {
+      // Log completion once at 00:00, then keep the same session open for overtime.
       let session: SessionUpdate | undefined;
       if (!this.phaseCompletionLogged) {
         this.phaseCompletionLogged = true;
@@ -78,6 +89,7 @@ export class TimerStore {
   }
 
   stop(config: TimerConfig): SessionUpdate | undefined {
+    // Stop records meaningful partial work, but an untouched idle timer creates no log.
     const hasSession = this.running || this.phaseElapsedSeconds > 0 || this.overtimeSeconds > 0 || this.phaseCompletionLogged;
     const session = hasSession ? this.finishPhase(false, config) : undefined;
     this.reset(config);
@@ -90,6 +102,8 @@ export class TimerStore {
 
   private finishPhase(completed: boolean, config: TimerConfig): SessionUpdate {
     const finishedPhase = this.phase;
+    // Overtime already created the completed focus entry at 00:00. Replace that
+    // entry with its final overtime duration instead of adding a duplicate.
     const replaceLatest = this.phaseCompletionLogged && finishedPhase === "focus";
     const log = this.createLog(finishedPhase, replaceLatest ? true : completed, config);
     const update: SessionUpdate = {
@@ -98,6 +112,7 @@ export class TimerStore {
       incrementsCompletedFocuses: finishedPhase === "focus" && completed && !this.phaseCompletionLogged
     };
 
+    // Phase transitions are centralized here so stop, skip, and natural completion agree.
     this.phase = finishedPhase === "focus" ? "break" : "focus";
     this.secondsLeft = phaseDurationSeconds(this.phase, config);
     this.overtimeSeconds = 0;

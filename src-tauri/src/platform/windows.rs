@@ -1,3 +1,5 @@
+//! Minimal Win32 implementation used by the foreground-window commands.
+
 #[link(name = "user32")]
 extern "system" {
     fn GetForegroundWindow() -> *mut std::ffi::c_void;
@@ -16,6 +18,7 @@ unsafe fn window_title(window: *mut std::ffi::c_void) -> String {
         return String::new();
     }
 
+    // Win32 returns UTF-16 and requires room for the trailing null terminator.
     let mut buffer = vec![0_u16; length as usize + 1];
     let copied = GetWindowTextW(window, buffer.as_mut_ptr(), buffer.len() as i32);
     if copied <= 0 {
@@ -33,6 +36,7 @@ pub fn minimize_foreground_window(expected_title: &str) -> bool {
     unsafe {
         const SW_MINIMIZE: i32 = 6;
         let window = GetForegroundWindow();
+        // Re-check immediately before mutation to avoid a foreground-window race.
         if window.is_null() || window_title(window) != expected_title {
             return false;
         }

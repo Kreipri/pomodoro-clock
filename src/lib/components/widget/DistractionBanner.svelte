@@ -1,4 +1,5 @@
 <script lang="ts">
+  /** Warning copy is already selected by DistractionStore. */
   type Props = {
     label: string;
     seconds: number;

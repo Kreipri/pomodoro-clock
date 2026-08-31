@@ -1,6 +1,8 @@
 mod commands;
 mod platform;
 
+/// Builds the native application and registers the small command surface used by Svelte.
+/// Business rules stay in the frontend; these commands only expose OS capabilities.
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()

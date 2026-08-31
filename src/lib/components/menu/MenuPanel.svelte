@@ -2,6 +2,7 @@
   import type { Snippet } from "svelte";
   import type { MenuView } from "$lib/types";
 
+  /** Shell inputs; actual tab content is supplied through the children snippet. */
   type Props = {
     view: MenuView;
     onViewChange: (view: MenuView) => void;
@@ -33,16 +34,19 @@
     </div>
   </header>
 
+  <!-- The active tab component is rendered here without coupling the shell to its props. -->
   {@render children()}
 </section>
 
 <style>
+  /* Modal shell and backdrop */
   .menu-backdrop { position: absolute; z-index: 9; inset: 0; border: 0; background: rgba(6,2,7,.22); backdrop-filter: blur(3px); cursor: default; }
   .settings-panel { position: absolute; z-index: 10; inset: 12px; display: flex; overflow: hidden; padding: 24px; flex-direction: column; border: 1px solid rgba(255,235,230,.1); border-radius: 38px 25px 40px 27px / 30px 41px 27px 39px; background: radial-gradient(circle at 18% 3%, rgba(103,31,50,.34), transparent 31%), linear-gradient(150deg, rgba(25,10,23,.97), rgba(9,5,12,.95)); box-shadow: 0 22px 55px rgba(0,0,0,.52), inset 0 1px rgba(255,255,255,.04); backdrop-filter: blur(14px); }
   .settings-header { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,.055); }
   .menu-title { min-width: 0; }
   .kicker { margin: 0 0 2px; color: #b58b94; font-size: .62rem; font-weight: 850; letter-spacing: .16em; }
   h1 { overflow: hidden; margin: 0; color: #f7e8e3; font-family: Georgia, "Times New Roman", serif; font-size: 1.65rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+  /* Compact icon navigation */
   .settings-tools, .menu-tabs { display: flex; align-items: center; }
   .settings-tools { flex: 0 0 auto; gap: 7px; }
   .menu-tabs { gap: 3px; padding: 3px; border: 1px solid rgba(255,255,255,.055); border-radius: 999px; background: rgba(0,0,0,.22); }

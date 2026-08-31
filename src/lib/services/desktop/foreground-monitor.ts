@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 
 export type ForegroundWindowResult = {
+  // False in browser preview or when the platform command is unavailable.
   supported: boolean;
   title: string;
 };
@@ -17,6 +18,7 @@ export class ForegroundMonitor {
   }
 
   async minimizeIfUnchanged(expectedTitle: string): Promise<boolean> {
+    // Native code checks the title again to avoid minimizing a window focused moments later.
     try { return await invoke<boolean>("minimize_foreground_window", { expectedTitle }); }
     catch { return false; }
   }

@@ -8,6 +8,7 @@ export type PersistedAppState = {
   activity: ActivityData;
 };
 
+// Select fields accept only values exposed by the UI; unexpected persisted values fall back.
 const GROWTH_OPTIONS = [5, 10, 15, 30, 60];
 const MINIMIZE_OPTIONS = [0, 15, 30, 60, 120];
 const POPUP_OPTIONS = [-1, 0, 15, 30, 60];
@@ -17,6 +18,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function isSessionLog(value: unknown): value is SessionLog {
+  // localStorage is untrusted input: validate every required field before using a log.
   if (!isRecord(value)) return false;
   return (value.phase === "focus" || value.phase === "break")
     && typeof value.completed === "boolean"
@@ -26,9 +28,13 @@ function isSessionLog(value: unknown): value is SessionLog {
     && (value.actualSeconds === undefined || Number.isFinite(value.actualSeconds));
 }
 
-/** Accepts both the legacy flat v2 snapshot and the separated v3 shape. */
+/**
+ * Accepts both the legacy flat v2 snapshot and the separated v3 shape.
+ * Add future schema conversions here so stores only ever receive current, valid data.
+ */
 export function migratePersistedState(value: unknown): PersistedAppState {
   const root = isRecord(value) ? value : {};
+  // v3 nests feature snapshots; v2 stored every value at the root.
   const settingsSource = isRecord(root.settings) ? root.settings : root;
   const activitySource = isRecord(root.activity) ? root.activity : root;
 

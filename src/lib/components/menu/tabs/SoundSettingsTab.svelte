@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { AmbientStyle, SoundSettingsPatch, TickStyle } from "$lib/features/settings/types";
 
+  /** Audio UI only; AudioEngine creation and cleanup remain outside this component. */
   type Props = {
     tickEnabled: boolean;
     breakMusicEnabled: boolean;
@@ -25,6 +26,7 @@
     <div><h2>A rhythm for every ritual</h2><p>Quiet ticks for focus. A soft, shifting soundscape for breaks.</p></div>
   </div>
 
+  <!-- Focus tick controls -->
   <section class="sound-card">
     <header class="sound-card-heading">
       <span class="sound-kind focus-sound" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></span>
@@ -37,6 +39,7 @@
     </div>
   </section>
 
+  <!-- Break soundscape controls -->
   <section class="sound-card">
     <header class="sound-card-heading">
       <span class="sound-kind break-sound" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17.5 16.5A8 8 0 0 1 7.5 6.5a8 8 0 1 0 10 10Z"/><path d="m17 6 .4 1.2L19 8l-1.6.8L17 10l-.4-1.2L15 8l1.6-.8L17 6Z"/></svg></span>
@@ -51,6 +54,7 @@
     </div>
   </section>
 
+  <!-- Shared master volume for both synthesized sound families -->
   <section class="volume-card">
     <div class="volume-heading"><span>Master volume</span><output>{soundVolume}%</output></div>
     <div class="volume-control">
@@ -65,6 +69,7 @@
 </div>
 
 <style>
+  /* Intro and reusable sound cards */
   .menu-view { min-height: 0; flex: 1 1 auto; padding-right: 3px; overflow: auto; scrollbar-width: thin; scrollbar-color: #633048 transparent; }
   .sound-view { padding: 11px 3px 5px 0; }
   h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 1.08rem; font-weight: 600; }
@@ -93,6 +98,7 @@
   .sound-preview:hover, .sound-preview:focus-visible, .sound-preview.active { border-color: rgba(239,102,122,.28); background: rgba(143,37,61,.62); color: #fff0eb; }
   .sound-preview:disabled { cursor: default; opacity: .32; }
   .sound-preview svg { width: 15px; height: 15px; fill: currentColor; stroke: none; }
+  /* Master volume row and explanatory note */
   .volume-card { padding: 12px 13px; border: 1px solid rgba(255,255,255,.055); border-radius: 15px; background: rgba(0,0,0,.1); }
   .volume-heading { display: flex; align-items: center; justify-content: space-between; color: #b9a1a2; font-size: .7rem; font-weight: 700; }
   .volume-heading output { color: #e3c8c7; font-variant-numeric: tabular-nums; }

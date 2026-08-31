@@ -1,5 +1,6 @@
 import type { SettingsData } from "./types";
 
+// Keep all first-run/reset values here; migrations also fall back to these values.
 export const DEFAULT_RULES = ["Figma", "Google Docs", "Notion", "Visual Studio Code"];
 
 export const DEFAULT_SETTINGS: SettingsData = {

@@ -11,38 +11,53 @@ import { DesktopWindowService } from "$lib/services/desktop/desktop-window";
 import { ForegroundMonitor } from "$lib/services/desktop/foreground-monitor";
 import { loadAppState, saveAppState } from "$lib/services/persistence/settings-storage";
 
-/** Coordinates feature stores and side-effect services without rendering UI. */
+/**
+ * Application coordinator.
+ *
+ * Feature stores own their state and rules; services own browser/Tauri side effects.
+ * This class is the only place that connects them (for example, a distraction
+ * pauses timer progress and may ask the desktop service to resize the window).
+ * Keep rendering in +page.svelte and avoid putting feature calculations here.
+ */
 export class NibblesApp {
+  // Long-lived feature stores. Svelte components read their reactive fields directly.
   readonly settings = new SettingsStore();
   readonly timer = new TimerStore();
   readonly activity = new ActivityStore();
   readonly distraction = new DistractionStore();
 
+  // Small pieces of application-shell state that do not belong to one feature.
   settingsOpen = $state(false);
   menuView = $state<MenuView>("activity");
   ambientPreviewing = $state(false);
   pinned = $state(true);
 
+  // Side-effect adapters. Replacing one of these should not require UI changes.
   private readonly audio = new AudioEngine();
   private readonly desktop = new DesktopWindowService();
   private readonly foreground = new ForegroundMonitor();
   private timerInterval: ReturnType<typeof setInterval> | null = null;
   private monitorInterval: ReturnType<typeof setInterval> | null = null;
   private audioPreviewTimeout: ReturnType<typeof setTimeout> | null = null;
+  // These values prevent expensive resize-and-center calls on every one-second tick.
   private lastWindowStage = -1;
   private lastMenuOpen = false;
 
+  // Read-only values assembled from more than one feature for the UI.
   get monitorActive() { return this.timer.running && this.timer.phase === "focus"; }
   get timerProgress() { return this.timer.progress(this.settings.timerConfig); }
   get indicatorLabel() { return this.timer.indicatorLabel(this.distraction.isAllowed); }
   get showBook() { return this.timer.running && this.timer.phase === "focus" && this.distraction.isAllowed && this.distraction.effectiveStage === 0; }
 
   async initialize(): Promise<void> {
+    // Hydrate before starting intervals so the first tick uses the user's durations.
     const snapshot = loadAppState();
     this.settings.hydrate(snapshot.settings);
     this.activity.hydrate(snapshot.activity);
     this.timer.reset(this.settings.timerConfig);
     this.pinned = await this.desktop.isPinned();
+    // Timer cadence and foreground polling intentionally differ: window changes
+    // should be detected quickly, while productive time advances once per second.
     this.timerInterval = setInterval(() => this.tick(), 1000);
     this.monitorInterval = setInterval(() => void this.pollForegroundWindow(), 600);
     await this.pollForegroundWindow();
@@ -51,6 +66,7 @@ export class NibblesApp {
   }
 
   dispose(): void {
+    // Every interval, timeout, and audio node created by the app must end here.
     if (this.timerInterval) clearInterval(this.timerInterval);
     if (this.monitorInterval) clearInterval(this.monitorInterval);
     if (this.audioPreviewTimeout) clearTimeout(this.audioPreviewTimeout);
@@ -61,6 +77,8 @@ export class NibblesApp {
     this.audio.dispose();
   }
 
+  // Public commands are arrow properties so `this` remains bound when a component
+  // receives one directly as a callback prop.
   toggleTimer = (): void => {
     this.distraction.resetPreview();
     if (this.timer.running) this.pauseTimer();
@@ -74,6 +92,7 @@ export class NibblesApp {
   };
 
   stopTimer = (): void => {
+    // Stopping may produce a partial session, unlike merely pausing the timer.
     const session = this.timer.stop(this.settings.timerConfig);
     if (session) this.activity.record(session);
     this.distraction.isAllowed = true;
@@ -85,6 +104,7 @@ export class NibblesApp {
   };
 
   skipPhase = (): void => {
+    // TimerStore decides whether a zero-second phase counts as completed.
     this.activity.record(this.timer.skip(this.settings.timerConfig));
     this.distraction.clear();
     this.persist();
@@ -94,6 +114,7 @@ export class NibblesApp {
   };
 
   setWatchMode = (mode: WatchMode): void => {
+    // Re-evaluate immediately so the UI does not wait for the next monitor poll.
     this.settings.setWatchMode(mode);
     this.distraction.reevaluate(mode, this.settings.rules);
     this.distraction.clear();
@@ -118,6 +139,7 @@ export class NibblesApp {
   };
 
   updateDuration = (phase: Phase, minutes: number): void => {
+    // Settings validates the input; TimerStore updates its display only when idle.
     const safeValue = this.settings.updateDuration(phase, minutes);
     this.timer.syncDuration(phase, safeValue);
     this.persist();
@@ -139,6 +161,7 @@ export class NibblesApp {
   setMenuView = (view: MenuView): void => { this.menuView = view; };
 
   toggleSettings = (): void => {
+    // Opening the menu always starts on activity, matching the primary menu action.
     this.settingsOpen = !this.settingsOpen;
     if (this.settingsOpen) this.menuView = "activity";
     this.distraction.resetPreview();
@@ -146,6 +169,7 @@ export class NibblesApp {
   };
 
   previewForm = (stage: number): void => {
+    // The menu closes so the selected creature form has the full window to render.
     this.settingsOpen = false;
     this.distraction.preview(stage, () => this.syncWindowState());
     this.syncWindowState();
@@ -156,6 +180,7 @@ export class NibblesApp {
   };
 
   toggleAmbientPreview = async (): Promise<void> => {
+    // A preview self-terminates so an unattended settings panel cannot play forever.
     if (this.audioPreviewTimeout) clearTimeout(this.audioPreviewTimeout);
     this.audioPreviewTimeout = null;
     if (this.ambientPreviewing) {
@@ -183,6 +208,7 @@ export class NibblesApp {
   close = (): void => { void this.desktop.close(); };
 
   private pauseTimer(): void {
+    // Pausing also dismisses warning state; monitoring resumes from a clean state.
     this.timer.pause();
     this.distraction.isAllowed = true;
     this.distraction.clear();
@@ -204,6 +230,7 @@ export class NibblesApp {
       return;
     }
 
+    // Returning to an allowed window resets the escalation before time advances.
     if (this.timer.phase === "focus") this.distraction.clear();
     const result = this.timer.tick(this.settings.timerConfig);
     if (result.playFocusTick && this.settings.tickEnabled) void this.audio.playTick(this.settings.tickStyle, this.settings.soundVolume);
@@ -217,16 +244,19 @@ export class NibblesApp {
   }
 
   private async pollForegroundWindow(): Promise<void> {
+    // The service returns a safe unsupported result in browser preview mode.
     const result = await this.foreground.read();
     this.distraction.applyForegroundTitle(result.title, result.supported, this.monitorActive, this.settings.watchMode, this.settings.rules);
     this.syncWindowState();
   }
 
   private persist(): void {
+    // Persist feature snapshots, never live store instances or Svelte proxies.
     saveAppState(this.settings.snapshot(), this.activity.snapshot());
   }
 
   private syncAmbientAudio(): void {
+    // Break playback and the manual preview share one ambient engine.
     const shouldPlay = (this.timer.running && this.timer.phase === "break" && this.settings.breakMusicEnabled) || this.ambientPreviewing;
     void this.audio.syncAmbient(shouldPlay, this.settings.ambientStyle, this.settings.soundVolume);
   }
@@ -237,9 +267,10 @@ export class NibblesApp {
 
   private syncWindowState(force = false): void {
     const stage = this.distraction.effectiveStage;
+    // Resizing also centers the Tauri window, so only do it when layout state changes.
     if (!force && stage === this.lastWindowStage && this.settingsOpen === this.lastMenuOpen) return;
     this.lastWindowStage = stage;
     this.lastMenuOpen = this.settingsOpen;
-    void this.desktop.resizeForState(stage, this.settingsOpen);
+    void this.desktop.applyLayoutState(stage, this.settingsOpen);
   }
 }

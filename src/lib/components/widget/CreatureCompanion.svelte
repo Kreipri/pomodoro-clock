@@ -1,14 +1,40 @@
 <script lang="ts">
+  import { getCurrentWindow } from '@tauri-apps/api/window';
+
+  const appWindow = getCurrentWindow();
+
+  /** Visual inputs are derived by DistractionStore; this component owns animation only. */
   type Props = {
     stage: number;
     source: string;
     showBook: boolean;
   };
-
   let { stage, source, showBook }: Props = $props();
+
+  let imgElement = $state<HTMLImageElement | null>(null);
+
+    /** Make window draggable */
+  function handleDrag(e: MouseEvent) {
+    if (e.buttons !== 1 || !imgElement) return;
+
+    // Create a temporary, invisible canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = imgElement.width;
+    canvas.height = imgElement.height;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    // Draw the current frame of the creature onto our canvas
+    ctx.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
+    
+    if (e.buttons === 1) { //Left click
+      void appWindow.startDragging();
+    }
+  }
 </script>
 
-<div class="creature-stage stage-{stage}" aria-hidden="true">
+<div class="creature-stage stage-{stage}" onmousedown={handleDrag} aria-hidden="true">
   <!-- Re-keying the form intentionally restarts the transformation animation. -->
   {#key stage}
     <div class="form-change">
@@ -18,11 +44,13 @@
       </div>
     </div>
   {/key}
-  {#if stage >= 2}<div class="monster-speech" data-text="FEED ME">FEED ME</div>{/if}
+  <!-- Later forms add a deliberately rough, duplicated-text warning treatment. -->
+  {#if stage >= 2}<div class="monster-speech" data-text="FEED ME">FEED ME</div>{/if} <!-- TODO REMOVE? MAKE IT LOOK BETTER -->
 </div>
 
 <style>
-  .creature-stage { position: absolute; inset: 0 0 42px; display: grid; place-items: center; pointer-events: none; }
+  /* Form sizing scales with the progressively enlarged native window. */
+  .creature-stage { position: absolute; inset: 0 0 42px; display: grid; place-items: center;}
   .form-change { display: grid; width: 100%; height: 100%; place-items: center; transform-origin: 50% 50%; animation: form-change .58s cubic-bezier(.36,.07,.19,.97) both; }
   .float-layer { position: relative; display: grid; width: 100%; height: 100%; place-items: center; transform-origin: 50% 50%; animation: float 3.8s ease-in-out infinite; }
   .creature { display: block; max-width: 94%; max-height: 94%; object-fit: contain; transform-origin: 50% 50%; filter: brightness(1.28) saturate(1.65) contrast(1.06) drop-shadow(1px 0 0 rgba(236,75,91,.72)) drop-shadow(-1px 0 0 rgba(236,75,91,.58)) drop-shadow(0 1px 0 rgba(236,75,91,.62)) drop-shadow(0 -1px 0 rgba(236,75,91,.5)) drop-shadow(0 0 11px rgba(213,36,65,.48)) drop-shadow(0 14px 18px rgba(9,0,8,.48)); transition: width 450ms ease; }

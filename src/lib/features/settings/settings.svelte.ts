@@ -3,7 +3,12 @@ import type { Phase, TimerConfig } from "$lib/features/timer/types";
 import { DEFAULT_SETTINGS } from "./defaults";
 import type { RitualSettingsPatch, SettingsData, SoundSettingsPatch, WatchMode } from "./types";
 
+/**
+ * Reactive, validated user preferences.
+ * Persistence belongs to the app controller so this store remains storage-agnostic.
+ */
 export class SettingsStore {
+  // Every field starts from one shared defaults object to keep reset/migration values aligned.
   watchMode = $state<WatchMode>(DEFAULT_SETTINGS.watchMode);
   rules = $state<string[]>([...DEFAULT_SETTINGS.rules]);
   growthEvery = $state(DEFAULT_SETTINGS.growthEvery);
@@ -19,6 +24,7 @@ export class SettingsStore {
   ambientStyle = $state(DEFAULT_SETTINGS.ambientStyle);
 
   get timerConfig(): TimerConfig {
+    // TimerStore receives only the subset it needs rather than the whole settings store.
     return {
       focusMinutes: this.focusMinutes,
       breakMinutes: this.breakMinutes,
@@ -27,6 +33,7 @@ export class SettingsStore {
   }
 
   hydrate(settings: SettingsData): void {
+    // Migrations validate persisted input before it reaches this method.
     this.watchMode = settings.watchMode;
     this.rules = [...settings.rules];
     this.growthEvery = settings.growthEvery;
@@ -47,6 +54,7 @@ export class SettingsStore {
   addRule(value: string): void {
     const nextRule = value.trim();
     if (!nextRule) return;
+    // Matching and duplicate detection are case-insensitive for window titles.
     const duplicate = this.rules.some((rule) => rule.toLocaleLowerCase() === nextRule.toLocaleLowerCase());
     if (!duplicate) this.rules = [...this.rules, nextRule];
   }
@@ -56,6 +64,7 @@ export class SettingsStore {
   }
 
   updateDuration(phase: Phase, minutes: number): number {
+    // Return the normalized value so TimerStore can mirror it when currently idle.
     const safeValue = clampDuration(phase, minutes);
     if (phase === "focus") this.focusMinutes = safeValue;
     else this.breakMinutes = safeValue;
@@ -78,6 +87,7 @@ export class SettingsStore {
   }
 
   snapshot(): SettingsData {
+    // Copy arrays so persistence never holds a live reactive reference.
     return {
       watchMode: this.watchMode,
       rules: [...this.rules],

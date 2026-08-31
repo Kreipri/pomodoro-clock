@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Phase } from "$lib/features/timer/types";
 
+  /** Display-only timer values plus commands supplied by the application controller. */
   type Props = {
     phase: Phase;
     displayTime: string;
@@ -18,14 +19,16 @@
 </script>
 
 <div class:paused={pausedByDistraction} class:overtime class="time-indicator">
-  <svg class="progress-ring" viewBox="0 0 24 24" aria-hidden="true">
-    <circle class="progress-track" cx="12" cy="12" r="9" pathLength="100" />
-    <!-- pathLength=100 lets progress map directly to a percentage dash offset. -->
-    <circle class="progress-value" cx="12" cy="12" r="9" pathLength="100" style:stroke-dashoffset={100 - progress * 100} />
-  </svg>
   <time aria-label={displayTime}>{displayTime}</time><span>{indicatorLabel}</span>
 </div>
 
+<svg class="progress-ring" viewBox="0 0 24 24" aria-hidden="true">
+    <circle class="progress-track" cx="12" cy="12" r="9" pathLength="100" />
+    <!-- pathLength=100 lets progress map directly to a percentage dash offset. -->
+    <circle class="progress-value" cx="12" cy="12" r="9" pathLength="100" style:stroke-dashoffset={100 - progress * 100} />
+</svg>
+
+<!-- Actions reveal on widget hover/focus to keep the familiar visually uncluttered. -->
 <div class="timer-actions" role="group" aria-label="Timer controls">
   <button class="icon-button" onclick={onToggle} aria-label={running ? "Pause timer" : "Start timer"} title={running ? "Pause" : "Start"}>
     {#if running}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7v10M15 7v10" /></svg>{:else}<svg class="filled-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 9 6-9 6Z" /></svg>{/if}
@@ -35,16 +38,18 @@
 </div>
 
 <style>
+  /* Persistent time pill and radial progress indicator */
   .time-indicator { position: absolute; z-index: 12; left: 50%; bottom: 13px; display: flex; align-items: baseline; gap: 6px; min-width: 112px; padding: 6px 10px; border: 1px solid rgba(255,232,226,.09); border-radius: 999px; background: linear-gradient(110deg, rgba(19,7,17,.82), rgba(88,22,42,.48)); box-shadow: 0 7px 20px rgba(0,0,0,.28); backdrop-filter: blur(8px); transform: translateX(-50%); }
-  .progress-ring { width: 18px; height: 18px; overflow: visible; rotate: -90deg; }
+  .progress-ring { position: absolute; z-index: -10; left: 18%; top: 2%; width: 200px; height: 200px; overflow: visible; rotate: -90deg; }
   .progress-ring circle { fill: none; stroke-width: 2.5; }
   .progress-track { stroke: rgba(255,235,229,.14); }
-  .progress-value { stroke: #86b58f; stroke-dasharray: 100; stroke-dashoffset: 100; stroke-linecap: round; filter: drop-shadow(0 0 2px rgba(114,185,133,.65)); transition: stroke-dashoffset .45s linear, stroke .2s ease; }
+  .progress-value { stroke: #86b58f; stroke-dasharray: 100; stroke-dashoffset: 100; stroke-linecap: round; filter: drop-shadow(0 0 1px rgba(114,185,133,.65)); transition: stroke-dashoffset .45s linear, stroke .2s ease; }
   .time-indicator time { color: #fff0e9; font-family: Georgia, "Times New Roman", serif; font-size: 1.05rem; font-variant-numeric: tabular-nums; line-height: 1; }
   .time-indicator span { color: #b29495; font-size: .47rem; font-weight: 850; letter-spacing: .14em; }
   .time-indicator.paused .progress-value { stroke: #e24c62; filter: drop-shadow(0 0 3px #d73754); animation: blink .7s steps(2) infinite; }
   .time-indicator.paused span { color: #efa1aa; }
   .time-indicator.overtime { background: linear-gradient(110deg, rgba(19,7,17,.84), rgba(85,55,24,.54)); }
+  /* Hover/focus action cluster */
   .timer-actions { position: absolute; z-index: 16; left: 50%; bottom: 51px; display: flex; gap: 4px; opacity: 0; pointer-events: none; transform: translate(-50%,5px); transition: opacity 150ms ease, transform 150ms ease; }
   :global(.familiar:hover) .timer-actions, :global(.familiar:focus-within) .timer-actions { opacity: 1; pointer-events: auto; transform: translateX(-50%); }
   button { border: 0; cursor: pointer; }

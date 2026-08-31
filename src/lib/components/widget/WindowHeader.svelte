@@ -1,4 +1,5 @@
 <script lang="ts">
+  /** Native-window actions are callbacks so this component never imports Tauri APIs. */
   type Props = {
     pinned: boolean;
     menuOpen: boolean;
@@ -39,7 +40,8 @@
 </header>
 
 <style>
-  .window-header { position: absolute; z-index: 20; inset: 0 0 auto; height: 48px; opacity: 0; transition: opacity 150ms ease; }
+  /* The transparent full-width header is both hover target and native drag region. */
+  .window-header { position: absolute; z-index: 20; inset: 0 50px 40px 0; height: 48px; opacity: 0; transition: opacity 150ms ease; }
   .window-header.hidden { display: none; }
   :global(.familiar:hover) .window-header, :global(.familiar:focus-within) .window-header { opacity: 1; }
   .window-actions { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; }

@@ -10,6 +10,7 @@ export class AudioEngine {
   private ambientStarting = false;
 
   async unlock(): Promise<AudioContext | null> {
+    // Browsers require audio to be resumed from a user gesture; failures stay non-fatal.
     try {
       if (!this.context) this.context = new AudioContext();
       if (this.context.state === "suspended") await this.context.resume();
@@ -25,16 +26,19 @@ export class AudioEngine {
   }
 
   async syncAmbient(shouldPlay: boolean, style: AmbientStyle, volume: number): Promise<void> {
+    // This method is idempotent and safe to call after every relevant state change.
     this.ambientRequested = shouldPlay;
     if (!shouldPlay) {
       this.stopAmbient();
       return;
     }
+    // Changing mood recreates the synth because waveform/filter/chords all differ.
     if (this.ambient?.style !== style) this.stopAmbient();
     if (this.ambient) {
       this.ambient.setVolume(volume);
       return;
     }
+    // Guard against overlapping async starts while AudioContext is resuming.
     if (this.ambientStarting) return;
 
     this.ambientStarting = true;

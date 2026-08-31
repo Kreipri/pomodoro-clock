@@ -22,13 +22,14 @@
 
 <svelte:head>
   <title>Nibbles · Productivity Familiar</title>
-  <meta name="description" content="A summoned eldritch Pomodoro familiar that feasts on productivity." />
+  <meta name="description" content="A eldritch Pomodoro familiar that feasts on productivity." />
 </svelte:head>
 
 <main class:warning={app.distraction.stage > 0} class:final-form={app.distraction.stage === 3}>
   <section class="familiar" aria-label="Nibbles focus timer">
     <div class="ambient" aria-hidden="true"></div>
 
+    <!-- Native window chrome remains available above both the widget and menu views. -->
     <WindowHeader
       pinned={app.pinned}
       menuOpen={app.settingsOpen}
@@ -40,6 +41,7 @@
     />
 
     {#if app.settingsOpen}
+      <!-- MenuPanel owns the shell/tabs; each child owns one settings domain. -->
       <MenuPanel view={app.menuView} onViewChange={app.setMenuView} onClose={app.toggleSettings}>
         {#if app.menuView === "settings"}
           <RitualSettingsTab
@@ -96,6 +98,7 @@
         {/if}
       </MenuPanel>
     {:else}
+      <!-- Compact widget view: familiar artwork, timer controls, and conditional warning. -->
       <CreatureCompanion stage={app.distraction.effectiveStage} source={app.distraction.creatureSource} showBook={app.showBook} />
       <TimerControls
         phase={app.timer.phase}
@@ -117,6 +120,7 @@
 </main>
 
 <style>
+  /* Only application-wide canvas styles live here; component visuals stay colocated. */
   :global(*) { box-sizing: border-box; }
   :global(html), :global(body) { width: 100%; min-width: 100%; min-height: 100%; margin: 0; overflow: hidden; background: transparent !important; color: #f7e8e3; font-family: "Trebuchet MS", "Segoe UI", sans-serif; font-size: 14px; }
   :global(button), :global(input), :global(select) { font: inherit; }
