@@ -1,0 +1,119 @@
+import type { SessionLog, SessionUpdate } from "$lib/features/activity/types";
+import { formatClock, phaseDurationSeconds, timerProgress } from "./timer";
+import type { Phase, TimerConfig } from "./types";
+
+export type TimerTickResult = {
+  playFocusTick: boolean;
+  session?: SessionUpdate;
+};
+
+export class TimerStore {
+  phase = $state<Phase>("focus");
+  secondsLeft = $state(25 * 60);
+  overtimeSeconds = $state(0);
+  running = $state(false);
+  phaseElapsedSeconds = $state(0);
+  phaseCompletionLogged = $state(false);
+
+  get isOvertime() { return this.phase === "focus" && this.secondsLeft === 0; }
+  get displayTime() {
+    const clock = formatClock(this.isOvertime ? this.overtimeSeconds : this.secondsLeft);
+    return this.isOvertime && this.overtimeSeconds > 0 ? `+${clock}` : clock;
+  }
+
+  progress(config: TimerConfig): number {
+    return this.isOvertime ? 1 : timerProgress(this.secondsLeft, this.phase, config);
+  }
+
+  indicatorLabel(isAllowed: boolean): string {
+    if (!this.running) return "IDLE";
+    if (this.phase === "break") return "BREAK";
+    if (!isAllowed) return "FOCUS PAUSED";
+    if (this.isOvertime) return "OVERTIME";
+    return "FOCUS";
+  }
+
+  start(): void { this.running = true; }
+  pause(): void { this.running = false; }
+
+  reset(config: TimerConfig): void {
+    this.running = false;
+    this.phase = "focus";
+    this.secondsLeft = phaseDurationSeconds("focus", config);
+    this.overtimeSeconds = 0;
+    this.phaseElapsedSeconds = 0;
+    this.phaseCompletionLogged = false;
+  }
+
+  syncDuration(phase: Phase, minutes: number): void {
+    if (!this.running && this.phase === phase) this.secondsLeft = minutes * 60;
+  }
+
+  tick(config: TimerConfig): TimerTickResult {
+    if (!this.running) return { playFocusTick: false };
+    const playFocusTick = this.phase === "focus";
+
+    if (this.secondsLeft > 0) {
+      this.phaseElapsedSeconds += 1;
+      this.secondsLeft -= 1;
+      return { playFocusTick };
+    }
+
+    if (this.phase === "focus" && config.overtimeEnabled) {
+      let session: SessionUpdate | undefined;
+      if (!this.phaseCompletionLogged) {
+        this.phaseCompletionLogged = true;
+        session = {
+          log: this.createLog("focus", true, config),
+          replaceLatest: false,
+          incrementsCompletedFocuses: true
+        };
+      }
+      this.phaseElapsedSeconds += 1;
+      this.overtimeSeconds += 1;
+      return { playFocusTick, session };
+    }
+
+    return { playFocusTick, session: this.finishPhase(true, config) };
+  }
+
+  stop(config: TimerConfig): SessionUpdate | undefined {
+    const hasSession = this.running || this.phaseElapsedSeconds > 0 || this.overtimeSeconds > 0 || this.phaseCompletionLogged;
+    const session = hasSession ? this.finishPhase(false, config) : undefined;
+    this.reset(config);
+    return session;
+  }
+
+  skip(config: TimerConfig): SessionUpdate {
+    return this.finishPhase(this.secondsLeft === 0, config);
+  }
+
+  private finishPhase(completed: boolean, config: TimerConfig): SessionUpdate {
+    const finishedPhase = this.phase;
+    const replaceLatest = this.phaseCompletionLogged && finishedPhase === "focus";
+    const log = this.createLog(finishedPhase, replaceLatest ? true : completed, config);
+    const update: SessionUpdate = {
+      log,
+      replaceLatest,
+      incrementsCompletedFocuses: finishedPhase === "focus" && completed && !this.phaseCompletionLogged
+    };
+
+    this.phase = finishedPhase === "focus" ? "break" : "focus";
+    this.secondsLeft = phaseDurationSeconds(this.phase, config);
+    this.overtimeSeconds = 0;
+    this.phaseElapsedSeconds = 0;
+    this.phaseCompletionLogged = false;
+    return update;
+  }
+
+  private createLog(phase: Phase, completed: boolean, config: TimerConfig): SessionLog {
+    return {
+      phase,
+      completed,
+      endedAt: Date.now(),
+      minutes: phase === "focus" ? config.focusMinutes : config.breakMinutes,
+      overtimeSeconds: this.overtimeSeconds,
+      actualSeconds: this.phaseElapsedSeconds
+    };
+  }
+}
