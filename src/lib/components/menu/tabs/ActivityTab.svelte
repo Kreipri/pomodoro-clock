@@ -15,10 +15,7 @@
     trendMaximum: number;
     weekFocusMinutes: number;
     weekBreakMinutes: number;
-    weekCompletedFocuses: number;
-    weekSessionCount: number;
     averageFocusMinutes: number;
-    weekCompletionRate: number;
     logFilter: LogFilter;
     filteredLogs: SessionLog[];
     totalLogCount: number;
@@ -31,10 +28,7 @@
     trendMaximum,
     weekFocusMinutes,
     weekBreakMinutes,
-    weekCompletedFocuses,
-    weekSessionCount,
     averageFocusMinutes,
-    weekCompletionRate,
     logFilter,
     filteredLogs,
     totalLogCount,
@@ -76,68 +70,84 @@
   </div>
 
   <div class="activity-summary" aria-label="Seven-day totals and averages">
-    <div>
-      <span>Focus</span>
-      <strong>{formatTrendMinutes(weekFocusMinutes)}</strong>
-    </div>
-    <div>
-      <span>Break</span>
-      <strong>{formatTrendMinutes(weekBreakMinutes)}</strong>
-    </div>
-    <div>
-      <span>Fed</span>
-      <strong>{weekCompletedFocuses}</strong>
-    </div>
-    <div>
-      <span>Sessions</span>
-      <strong>{weekSessionCount}</strong>
-    </div>
-    <div>
-      <span>Avg focus</span>
-      <strong>{averageFocusMinutes}m</strong>
-    </div>
-    <div>
-      <span>Completion</span>
-      <strong>{weekCompletionRate}%</strong>
-    </div>
+    <article class="stat-card focus-stat">
+      <span class="stat-icon" aria-hidden="true"><Icon name="focus" /></span>
+      <span class="stat-copy">
+        <small>FOCUS TIME</small>
+        <strong>{formatTrendMinutes(weekFocusMinutes)}</strong>
+        <span>Seven-day total</span>
+      </span>
+    </article>
+
+    <article class="stat-card break-stat">
+      <span class="stat-icon" aria-hidden="true"><Icon name="break" /></span>
+      <span class="stat-copy">
+        <small>BREAK TIME</small>
+        <strong>{formatTrendMinutes(weekBreakMinutes)}</strong>
+        <span>Recovery time</span>
+      </span>
+    </article>
+
+    <article class="stat-card average-stat">
+      <span class="stat-icon" aria-hidden="true"><Icon name="clock" /></span>
+      <span class="stat-copy">
+        <small>AVERAGE FOCUS</small>
+        <strong>{averageFocusMinutes}m</strong>
+        <span>Per completed focus</span>
+      </span>
+    </article>
   </div>
 
   <!-- Both bar types use the same maximum so their heights are comparable. -->
-  <div
-    class="trend-chart"
-    role="img"
-    aria-label={`Seven-day chart: ${formatTrendMinutes(
-      weekFocusMinutes
-    )} focused and ${formatTrendMinutes(weekBreakMinutes)} on breaks`}
-  >
-    {#each trendDays as day}
-      <div class="trend-day">
-        <div class="bar-pair">
-          <!-- Bar height is the only data-driven inline style in this view. -->
-          <span
-            class="focus-bar"
-            title={`${formatTrendMinutes(day.focusMinutes)} focus`}
-            style:height={`${barHeight(day.focusMinutes)}%`}
-          ></span>
-          <span
-            class="break-bar"
-            title={`${formatTrendMinutes(day.breakMinutes)} break`}
-            style:height={`${barHeight(day.breakMinutes)}%`}
-          ></span>
-        </div>
-        <small>{day.label}</small>
+  <section class="chart-card">
+    <header class="chart-heading">
+      <div>
+        <p>DAILY RHYTHM</p>
+        <h3>Focus and recovery</h3>
       </div>
-    {/each}
-  </div>
+      <div class="trend-legend" aria-hidden="true">
+        <span><i class="focus-key"></i>Focus</span>
+        <span><i class="break-key"></i>Break</span>
+      </div>
+    </header>
 
-  <div class="trend-legend" aria-hidden="true">
-    <span><i class="focus-key"></i>Focus</span>
-    <span><i class="break-key"></i>Break</span>
-  </div>
+    <div
+      class="trend-chart"
+      role="img"
+      aria-label={`Seven-day chart: ${formatTrendMinutes(
+        weekFocusMinutes
+      )} focused and ${formatTrendMinutes(weekBreakMinutes)} on breaks`}
+    >
+      {#each trendDays as day}
+        <div class="trend-day">
+          <small class="day-value">
+            {day.focusMinutes > 0 ? formatTrendMinutes(day.focusMinutes) : "—"}
+          </small>
+          <div class="bar-pair">
+            <!-- Bar height is the only data-driven inline style in this view. -->
+            <span
+              class="focus-bar"
+              title={`${formatTrendMinutes(day.focusMinutes)} focus`}
+              style:height={`${barHeight(day.focusMinutes)}%`}
+            ></span>
+            <span
+              class="break-bar"
+              title={`${formatTrendMinutes(day.breakMinutes)} break`}
+              style:height={`${barHeight(day.breakMinutes)}%`}
+            ></span>
+          </div>
+          <small class="day-label">{day.label}</small>
+        </div>
+      {/each}
+    </div>
+  </section>
 
   <!-- Filter controls and the latest matching session records. -->
   <div class="session-heading">
-    <h3>Sessions</h3>
+    <div>
+      <p>RECENT HISTORY</p>
+      <h3>Sessions</h3>
+    </div>
     <div class="log-filters" role="group" aria-label="Filter sessions">
       <button
         class:active={logFilter === "all"}
@@ -192,19 +202,23 @@
           </span>
 
           <span class="log-copy">
-            <strong>{log.phase === "focus" ? "Focus" : "Break"}</strong>
+            <strong>{log.phase === "focus" ? "Focus session" : "Break session"}</strong>
             <small>
-              {log.completed ? "Completed" : "Skipped"}
+              {formatLogTime(log.endedAt)}
               {log.overtimeSeconds > 0
                 ? ` · +${Math.ceil(log.overtimeSeconds / 60)}m flow`
                 : ""}
-              · {formatLogTime(log.endedAt)}
             </small>
           </span>
 
-          <time datetime={new Date(log.endedAt).toISOString()}>
-            {formatDuration(sessionDurationSeconds(log))}
-          </time>
+          <span class="log-result">
+            <time datetime={new Date(log.endedAt).toISOString()}>
+              {formatDuration(sessionDurationSeconds(log))}
+            </time>
+            <small class:completed={log.completed}>
+              {log.completed ? "Completed" : "Skipped"}
+            </small>
+          </span>
         </li>
       {/each}
     </ol>
@@ -214,7 +228,7 @@
 <style>
   .menu-view {
     width: 100%;
-    padding: 0.625rem 0 0.375rem;
+    padding: 1.15rem 0 0.5rem;
   }
 
   .section-heading {
@@ -225,20 +239,21 @@
 
   .activity-heading {
     align-items: flex-end;
-    margin-bottom: 0.6875rem;
+    margin-bottom: 1rem;
   }
 
   h2 {
     margin: 0;
     font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 600;
+    font-size: 1.45rem;
+    font-weight: 650;
+    letter-spacing: -0.025em;
   }
 
   .section-kicker {
     margin: 0 0 0.125rem;
-    color: #9a7b82;
-    font-size: 0.55rem;
+    color: #b4939b;
+    font-size: 0.84rem;
     font-weight: 850;
     letter-spacing: 0.13em;
   }
@@ -246,18 +261,18 @@
   .trend-change {
     display: inline-flex;
     align-items: center;
-    gap: 0.1875rem;
-    padding: 0.25rem 0.4375rem;
+    gap: 0.3rem;
+    padding: 0.4rem 0.65rem;
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.035);
     color: #a99497;
-    font-size: 0.62rem;
+    font-size: 0.84rem;
     font-weight: 800;
   }
 
   .trend-change :global(svg) {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
   }
 
   .trend-change.trend-up {
@@ -275,52 +290,124 @@
   .activity-summary {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.3125rem;
-    margin-bottom: 0.5625rem;
+    gap: 0.65rem;
+    margin-bottom: 0.9rem;
   }
 
-  .activity-summary div {
-    padding: 0.4375rem 0.5rem 0.375rem;
-    border: 1px solid rgba(255, 255, 255, 0.055);
-    border-radius: 0.6875rem;
-    background: linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.035),
-      rgba(0, 0, 0, 0.07)
-    );
+  .stat-card {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.8rem;
+    min-width: 0;
+    padding: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.065);
+    border-radius: 1rem;
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(0, 0, 0, 0.08));
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.025);
   }
 
-  .activity-summary span,
-  .activity-summary strong {
+  .stat-icon {
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border-radius: 0.8rem;
+    font-size: 1.2rem;
+  }
+
+  .focus-stat .stat-icon {
+    background: rgba(193, 46, 74, 0.16);
+    color: #ff627b;
+  }
+
+  .break-stat .stat-icon {
+    background: rgba(92, 145, 125, 0.15);
+    color: #98c7b4;
+  }
+
+  .average-stat .stat-icon {
+    background: rgba(181, 131, 79, 0.14);
+    color: #d9ae78;
+  }
+
+  .stat-copy,
+  .stat-copy small,
+  .stat-copy strong,
+  .stat-copy > span {
     display: block;
+    min-width: 0;
   }
 
-  .activity-summary span {
-    margin-bottom: 0.125rem;
-    color: #a28c90;
-    font-size: 0.64rem;
-    font-weight: 750;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+  .stat-copy small {
+    color: #ac949a;
+    font-size: 0.82rem;
+    font-weight: 780;
+    letter-spacing: 0.09em;
   }
 
-  .activity-summary strong {
+  .stat-copy strong {
     overflow: hidden;
-    color: #f0ddda;
+    margin-top: 0.08rem;
+    color: #fff0ed;
     font-family: var(--font-display);
-    font-size: 1.02rem;
-    font-weight: 600;
+    font-size: 1.55rem;
+    font-weight: 680;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .stat-copy > span {
+    overflow: hidden;
+    margin-top: 0.2rem;
+    color: #a18b91;
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .chart-card {
+    margin-bottom: 1.15rem;
+    padding: 1rem 1rem 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1rem;
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  .chart-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .chart-heading p,
+  .session-heading p {
+    margin: 0 0 0.14rem;
+    color: #b58a95;
+    font-size: 0.82rem;
+    font-weight: 780;
+    letter-spacing: 0.12em;
+  }
+
+  .chart-heading h3 {
+    margin: 0;
+    color: #dcc8c9;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 650;
   }
 
   .trend-chart {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    height: 7.75rem;
-    padding: 0.5625rem 0.5rem 0.1875rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 0.8125rem;
+    height: 12rem;
+    padding: 0.65rem 0.6rem 0.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.055);
     background:
       repeating-linear-gradient(
         to bottom,
@@ -328,12 +415,12 @@
         transparent 1.6875rem,
         rgba(255, 255, 255, 0.035) 1.75rem
       ),
-      rgba(0, 0, 0, 0.13);
+      transparent;
   }
 
   .trend-day {
     display: grid;
-    grid-template-rows: 1fr 0.8125rem;
+    grid-template-rows: 1.2rem minmax(0, 1fr) 1.25rem;
     min-width: 0;
     text-align: center;
   }
@@ -343,12 +430,12 @@
     min-height: 0;
     align-items: flex-end;
     justify-content: center;
-    gap: 0.1875rem;
+    gap: 0.3rem;
   }
 
   .bar-pair > span {
     display: block;
-    width: 0.4375rem;
+    width: 0.6rem;
     min-height: 0;
     border-radius: 0.3125rem 0.3125rem 0.125rem 0.125rem;
     transition: height 240ms ease;
@@ -366,18 +453,32 @@
 
   .trend-day small {
     align-self: end;
-    color: #927d82;
-    font-size: 0.56rem;
+    color: #ad969b;
+    font-size: 0.84rem;
     font-weight: 700;
+  }
+
+  .trend-day .day-value {
+    align-self: start;
+    color: #bca3a6;
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 650;
+  }
+
+  .trend-day .day-label {
+    color: #a58e94;
+    font-size: 0.84rem;
+    letter-spacing: 0.03em;
   }
 
   .trend-legend {
     display: flex;
     justify-content: flex-end;
-    gap: 0.625rem;
-    margin: 0.3125rem 0.125rem 0.75rem;
-    color: #958084;
-    font-size: 0.56rem;
+    gap: 0.85rem;
+    margin: 0;
+    color: #b29ca0;
+    font-size: 0.86rem;
   }
 
   .trend-legend span {
@@ -405,36 +506,36 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.4375rem;
+    margin-bottom: 0.75rem;
   }
 
   .session-heading h3 {
     margin: 0;
     color: #d9c1bf;
     font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 650;
   }
 
   .log-filters {
     display: flex;
-    gap: 0.25rem;
-    padding: 0.1875rem;
+    gap: 0.3rem;
+    padding: 0.25rem;
     border-radius: 999px;
     background: rgba(0, 0, 0, 0.2);
   }
 
   .log-filters button {
     display: grid;
-    width: 1.5625rem;
-    height: 1.5625rem;
+    width: 2rem;
+    height: 2rem;
     padding: 0;
     place-items: center;
     border: 1px solid transparent;
     border-radius: 50%;
     background: transparent;
     color: #77636a;
-    font-size: 0.875rem;
+    font-size: 1rem;
     transition: var(--transition-fast);
   }
 
@@ -456,32 +557,32 @@
 
   .empty-log {
     display: flex;
-    min-height: 3.625rem;
+    min-height: 5rem;
     align-items: center;
     justify-content: center;
-    gap: 0.5625rem;
-    padding: 0.5625rem 0.75rem;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
     border: 1px dashed rgba(255, 255, 255, 0.065);
     border-radius: 0.6875rem;
-    color: #705e64;
+    color: #a08a90;
   }
 
   .empty-log :global(svg) {
     flex: 0 0 auto;
-    font-size: 1.1875rem;
+    font-size: 1.4rem;
   }
 
   .empty-log p {
     max-width: 16.25rem;
     margin: 0;
-    font-size: 0.76rem;
-    line-height: 1.35;
+    font-size: 0.96rem;
+    line-height: 1.5;
   }
 
   .log-list {
     display: grid;
-    max-height: 18.75rem;
-    gap: 0.3125rem;
+    max-height: none;
+    gap: 0.45rem;
     margin: 0;
     padding: 0 0.1875rem 0 0;
     overflow: auto;
@@ -492,23 +593,29 @@
 
   .log-list li {
     display: grid;
-    grid-template-columns: 1.9375rem minmax(0, 1fr) auto;
-    min-height: 2.6875rem;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    min-height: 3.35rem;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.3125rem 0.5rem 0.3125rem 0.3125rem;
+    gap: 0.7rem;
+    padding: 0.45rem 0.75rem 0.45rem 0.45rem;
     border: 1px solid rgba(255, 255, 255, 0.045);
-    border-radius: 0.6875rem;
-    background: rgba(255, 255, 255, 0.022);
+    border-radius: 0.8rem;
+    background: rgba(255, 255, 255, 0.028);
+    transition: var(--transition-fast);
+  }
+
+  .log-list li:hover {
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.045);
   }
 
   .log-icon {
     display: grid;
-    width: 1.8125rem;
-    height: 1.8125rem;
+    width: 2.35rem;
+    height: 2.35rem;
     place-items: center;
     border-radius: 0.5625rem;
-    font-size: 0.875rem;
+    font-size: 1.05rem;
   }
 
   .log-icon.focus {
@@ -534,20 +641,69 @@
   }
 
   .log-copy strong {
-    color: #d9c0be;
-    font-size: 0.78rem;
+    color: #ead4d1;
+    font-size: 1rem;
     font-weight: 700;
   }
 
   .log-copy small {
     margin-top: 0.125rem;
-    color: #927c81;
-    font-size: 0.66rem;
+    color: #b29ba0;
+    font-size: 0.86rem;
   }
 
-  .log-list time {
-    color: #b99da1;
-    font-size: 0.7rem;
+  .log-result {
+    display: grid;
+    justify-items: end;
+    gap: 0.18rem;
+  }
+
+  .log-result time {
+    color: #ead5d3;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 650;
     font-variant-numeric: tabular-nums;
+  }
+
+  .log-result small {
+    padding: 0.16rem 0.38rem;
+    border-radius: 999px;
+    background: rgba(185, 76, 91, 0.1);
+    color: #a77a82;
+    font-size: 0.82rem;
+    font-weight: 720;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .log-result small.completed {
+    background: rgba(91, 145, 111, 0.12);
+    color: #82b897;
+  }
+
+  @media (max-width: 720px) {
+    .activity-summary {
+      gap: 0.45rem;
+    }
+
+    .stat-card {
+      grid-template-columns: 1fr;
+      gap: 0.45rem;
+    }
+
+    .stat-icon {
+      width: 2.15rem;
+      height: 2.15rem;
+      font-size: 1rem;
+    }
+
+    .stat-copy strong {
+      font-size: 1.25rem;
+    }
+
+    .stat-copy > span {
+      display: none;
+    }
   }
 </style>

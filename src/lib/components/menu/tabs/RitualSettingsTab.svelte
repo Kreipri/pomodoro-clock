@@ -245,12 +245,12 @@
   }
 
   .setting-section {
-    padding: 0.8125rem 0;
+    padding: 1.1rem 0;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .setting-section.first-section {
-    padding-top: 0.5625rem;
+    padding-top: 1rem;
     border-top: 0;
   }
 
@@ -269,13 +269,14 @@
   h2 {
     margin: 0;
     font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
   }
 
   .section-heading > span {
     color: #ad818b;
-    font-size: 0.72rem;
+    font-size: 0.85rem;
     font-weight: 750;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -298,19 +299,19 @@
   .mode-switch {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.1875rem;
-    margin: 0.625rem 0 0.4375rem;
-    padding: 0.1875rem;
+    gap: 0.25rem;
+    margin: 0.85rem 0 0.6rem;
+    padding: 0.25rem;
     border-radius: 999px;
     background: rgba(0, 0, 0, 0.27);
   }
 
   .mode-switch button {
-    padding: 0.4375rem;
+    padding: 0.6rem;
     border-radius: 999px;
     background: transparent;
-    color: #a88d91;
-    font-size: 0.82rem;
+    color: #c0a8ac;
+    font-size: 0.96rem;
   }
 
   .mode-switch button.chosen {
@@ -320,16 +321,16 @@
   }
 
   .help-copy {
-    margin: 0.3125rem 0 0.5625rem;
-    color: #a38b8f;
-    font-size: 0.82rem;
-    line-height: 1.38;
+    margin: 0.45rem 0 0.75rem;
+    color: #bda7aa;
+    font-size: 0.96rem;
+    line-height: 1.55;
   }
 
   .rule-entry {
     display: grid;
-    grid-template-columns: 1fr 2.125rem;
-    gap: 0.375rem;
+    grid-template-columns: 1fr 2.6rem;
+    gap: 0.5rem;
   }
 
   input,
@@ -349,35 +350,35 @@
 
   .rule-entry input {
     width: 100%;
-    padding: 0.5625rem 0.6875rem;
-    border-radius: 0.6875rem;
-    font-size: 0.84rem;
+    padding: 0.72rem 0.85rem;
+    border-radius: 0.75rem;
+    font-size: 0.96rem;
   }
 
   .rule-entry > button {
     display: grid;
     padding: 0;
     place-items: center;
-    border-radius: 0.6875rem;
+    border-radius: 0.75rem;
     background: linear-gradient(145deg, #8d2c49, #5e1937);
     color: #ffeae7;
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 
   .chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.3125rem;
-    margin-top: 0.5rem;
+    gap: 0.4rem;
+    margin-top: 0.65rem;
   }
 
   .chip {
-    padding: 0.3125rem 0.5rem;
+    padding: 0.42rem 0.65rem;
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.05);
     color: #d5bfbd;
-    font-size: 0.73rem;
+    font-size: 0.86rem;
   }
 
   .chip span {
@@ -388,9 +389,9 @@
   .observed-title {
     width: 100%;
     justify-content: space-between;
-    gap: 0.625rem;
-    margin-top: 0.5625rem;
-    padding: 0.4375rem 0.5625rem;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    padding: 0.65rem 0.75rem;
     border-radius: 0.625rem;
     background: rgba(106, 30, 51, 0.15);
     text-align: left;
@@ -399,7 +400,7 @@
   .observed-title span {
     min-width: 0;
     overflow: hidden;
-    font-size: 0.58rem;
+    font-size: 0.84rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -407,8 +408,8 @@
   .observed-title small {
     display: block;
     margin-bottom: 0.0625rem;
-    color: #87636d;
-    font-size: 0.45rem;
+    color: #aa858e;
+    font-size: 0.8rem;
     font-weight: 800;
     letter-spacing: 0.12em;
   }
@@ -422,20 +423,20 @@
   .settings-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.4375rem;
-    margin-top: 0.5625rem;
+    gap: 0.65rem;
+    margin-top: 0.75rem;
   }
 
   .settings-grid label {
     display: grid;
     grid-template-columns: 1fr auto auto;
     align-items: center;
-    gap: 0.25rem;
-    padding: 0.5rem 0.5625rem;
+    gap: 0.35rem;
+    padding: 0.7rem 0.75rem;
     border: 1px solid rgba(255, 255, 255, 0.055);
-    border-radius: 0.6875rem;
-    color: #b79fa0;
-    font-size: 0.77rem;
+    border-radius: 0.8rem;
+    color: #cbb4b5;
+    font-size: 0.92rem;
   }
 
   .response-grid {
@@ -447,17 +448,17 @@
   }
 
   .settings-grid input {
-    width: 2.4375rem;
-    padding: 0.25rem;
+    width: 3rem;
+    padding: 0.35rem;
     border-radius: 0.375rem;
     text-align: right;
   }
 
   .settings-grid select {
-    max-width: 5.625rem;
-    padding: 0.3125rem;
+    max-width: 7.5rem;
+    padding: 0.4rem;
     border-radius: 0.375rem;
-    font-size: 0.7rem;
+    font-size: 0.86rem;
   }
 
   .settings-grid small {
@@ -466,9 +467,9 @@
 
   .toggle-row {
     justify-content: space-between;
-    gap: 0.9375rem;
-    margin-top: 0.5rem;
-    padding: 0.5625rem 0.125rem 0;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    padding: 0.75rem 0.2rem 0;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
   }
 
@@ -480,26 +481,26 @@
 
   .toggle-row b {
     font-family: var(--font-display);
-    font-size: 0.96rem;
+    font-size: 1.12rem;
   }
 
   .toggle-row small {
     margin-top: 0.125rem;
-    color: #a08b8e;
-    font-size: 0.7rem;
+    color: #bba4a8;
+    font-size: 0.86rem;
   }
 
   .toggle-row input {
-    width: 1.9375rem;
-    height: 1.0625rem;
+    width: 2.2rem;
+    height: 1.2rem;
     accent-color: #932f4a;
   }
 
   .form-preview {
     justify-content: flex-end;
-    gap: 0.3125rem;
-    color: #927b82;
-    font-size: 0.64rem;
+    gap: 0.4rem;
+    color: #ad959c;
+    font-size: 0.82rem;
   }
 
   .form-preview span {
@@ -508,13 +509,13 @@
 
   .form-preview button {
     display: grid;
-    width: 1.4375rem;
-    height: 1.4375rem;
+    width: 1.8rem;
+    height: 1.8rem;
     padding: 0;
     place-items: center;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.06);
     color: #b28c94;
-    font-size: 0.55rem;
+    font-size: 0.84rem;
   }
 </style>

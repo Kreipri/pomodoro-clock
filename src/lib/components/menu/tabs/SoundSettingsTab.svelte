@@ -173,27 +173,28 @@
 <style>
   .menu-view {
     width: 100%;
-    padding: 0.6875rem 0 0.3125rem;
+    padding: 1rem 0 0.5rem;
   }
 
   h2 {
     margin: 0;
     font-family: var(--font-display);
-    font-size: 1.08rem;
-    font-weight: 600;
+    font-size: 1.35rem;
+    font-weight: 650;
+    letter-spacing: -0.025em;
   }
 
   .sound-intro {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem 0.3125rem 0.9375rem;
+    gap: 1rem;
+    padding: 0.7rem 0.4rem 1.2rem;
   }
 
   .intro-icon {
     display: grid;
-    width: 2.625rem;
-    height: 2.625rem;
+    width: 3.25rem;
+    height: 3.25rem;
     flex: 0 0 auto;
     place-items: center;
     border: 1px solid rgba(245, 121, 139, 0.14);
@@ -204,7 +205,7 @@
       rgba(67, 15, 40, 0.24)
     );
     color: #e06679;
-    font-size: 1.4375rem;
+    font-size: 1.7rem;
     box-shadow:
       inset 0 1px rgba(255, 255, 255, 0.04),
       0 0.5rem 1.375rem rgba(0, 0, 0, 0.17);
@@ -212,16 +213,16 @@
 
   .sound-intro p {
     margin: 0.1875rem 0 0;
-    color: #9e888d;
-    font-size: 0.7rem;
-    line-height: 1.4;
+    color: #b9a3a8;
+    font-size: 0.96rem;
+    line-height: 1.55;
   }
 
   .sound-card {
-    margin-bottom: 0.5625rem;
-    padding: 0.75rem;
+    margin-bottom: 0.8rem;
+    padding: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 0.9375rem;
+    border-radius: 1rem;
     background: linear-gradient(
       145deg,
       rgba(255, 255, 255, 0.035),
@@ -231,18 +232,18 @@
 
   .sound-card-heading {
     display: grid;
-    grid-template-columns: 2.1875rem minmax(0, 1fr) auto;
+    grid-template-columns: 2.75rem minmax(0, 1fr) auto;
     align-items: center;
-    gap: 0.5625rem;
+    gap: 0.75rem;
   }
 
   .sound-kind {
     display: grid;
-    width: 2.1875rem;
-    height: 2.1875rem;
+    width: 2.75rem;
+    height: 2.75rem;
     place-items: center;
     border-radius: 0.6875rem;
-    font-size: 1.125rem;
+    font-size: 1.3rem;
   }
 
   .focus-sound {
@@ -265,44 +266,44 @@
   .sound-copy strong {
     color: #e3cecb;
     font-family: var(--font-display);
-    font-size: 0.91rem;
-    font-weight: 600;
+    font-size: 1.12rem;
+    font-weight: 650;
   }
 
   .sound-copy small {
     overflow: hidden;
     margin-top: 0.125rem;
-    color: #917a80;
-    font-size: 0.64rem;
+    color: #ad969c;
+    font-size: 0.86rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .sound-card-heading input {
-    width: 1.9375rem;
-    height: 1.0625rem;
+    width: 2.2rem;
+    height: 1.2rem;
     accent-color: #9b304c;
   }
 
   .sound-controls {
     display: grid;
-    grid-template-columns: 1fr 2.0625rem;
-    gap: 0.4375rem;
-    margin-top: 0.625rem;
+    grid-template-columns: 1fr 2.6rem;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
   }
 
   .sound-controls label {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.65rem;
     min-width: 0;
-    padding: 0.375rem 0.5rem 0.375rem 0.625rem;
+    padding: 0.55rem 0.65rem 0.55rem 0.8rem;
     border: 1px solid rgba(255, 255, 255, 0.055);
     border-radius: 0.625rem;
     background: rgba(0, 0, 0, 0.13);
-    color: #a78f94;
-    font-size: 0.7rem;
+    color: #c0a9ae;
+    font-size: 0.92rem;
   }
 
   select {
@@ -319,11 +320,11 @@
   }
 
   .sound-controls select {
-    max-width: 7.25rem;
-    padding: 0.3125rem 0.4375rem;
+    max-width: 9rem;
+    padding: 0.42rem 0.55rem;
     border-radius: 0.4375rem;
     color: #d8c1bf;
-    font-size: 0.69rem;
+    font-size: 0.9rem;
   }
 
   .sound-controls select:disabled {
@@ -332,15 +333,15 @@
 
   .sound-preview {
     display: grid;
-    width: 2.0625rem;
-    height: 2.0625rem;
+    width: 2.6rem;
+    height: 2.6rem;
     padding: 0;
     place-items: center;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 0.625rem;
     background: rgba(107, 27, 50, 0.34);
     color: #dca9ae;
-    font-size: 0.9375rem;
+    font-size: 1.1rem;
     transition: var(--transition-fast);
   }
 
@@ -358,9 +359,9 @@
   }
 
   .volume-card {
-    padding: 0.75rem 0.8125rem;
+    padding: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.055);
-    border-radius: 0.9375rem;
+    border-radius: 1rem;
     background: rgba(0, 0, 0, 0.1);
   }
 
@@ -368,8 +369,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: #b9a1a2;
-    font-size: 0.7rem;
+    color: #cdb6b7;
+    font-size: 0.92rem;
     font-weight: 700;
   }
 
@@ -382,10 +383,10 @@
     display: grid;
     grid-template-columns: 1.0625rem 1fr 1.0625rem;
     align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+    gap: 0.65rem;
+    margin-top: 0.7rem;
     color: #876c74;
-    font-size: 1.0625rem;
+    font-size: 1.2rem;
   }
 
   .volume-control input {
@@ -402,11 +403,11 @@
   .sound-note {
     display: flex;
     align-items: flex-start;
-    gap: 0.4375rem;
-    margin: 0.6875rem 0.375rem 0;
-    color: #806c72;
-    font-size: 0.62rem;
-    line-height: 1.4;
+    gap: 0.55rem;
+    margin: 0.9rem 0.45rem 0;
+    color: #ad969c;
+    font-size: 0.86rem;
+    line-height: 1.55;
   }
 
   .sound-note :global(svg) {

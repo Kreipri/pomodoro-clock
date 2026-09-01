@@ -17,7 +17,7 @@ export function buildTrendDays(logs: SessionLog[], now = new Date()): TrendDay[]
     date.setDate(today.getDate() - (6 - index));
     return {
       key: date.getTime(),
-      label: new Intl.DateTimeFormat(undefined, { weekday: "narrow" }).format(date),
+      label: new Intl.DateTimeFormat(undefined, { weekday: "short" }).format(date),
       focusMinutes: 0,
       breakMinutes: 0
     } satisfies TrendDay;

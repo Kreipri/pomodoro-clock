@@ -7,262 +7,593 @@
 
   let { app }: { app: NibblesApp } = $props();
 
-  const titles = {
-    settings: "Ritual settings",
-    sound: "Sound settings",
-    activity: "Focus activity"
+  const viewDetails = {
+    settings: {
+      eyebrow: "CUSTOMIZE",
+      title: "Ritual settings",
+      description: "Shape the timer, window rules, and how Nibbles responds."
+    },
+    sound: {
+      eyebrow: "LISTEN",
+      title: "Sound settings",
+      description: "Choose the sounds that accompany focus and rest."
+    },
+    activity: {
+      eyebrow: "REFLECT",
+      title: "Focus activity",
+      description: "See where your attention went over the last seven days."
+    }
   } as const;
+
+  const resizeHandles = [
+    { direction: "North", className: "north", label: "Resize from top" },
+    { direction: "South", className: "south", label: "Resize from bottom" },
+    { direction: "East", className: "east", label: "Resize from right" },
+    { direction: "West", className: "west", label: "Resize from left" },
+    { direction: "NorthEast", className: "north-east", label: "Resize from top right" },
+    { direction: "NorthWest", className: "north-west", label: "Resize from top left" },
+    { direction: "SouthEast", className: "south-east", label: "Resize from bottom right" },
+    { direction: "SouthWest", className: "south-west", label: "Resize from bottom left" }
+  ] as const;
 </script>
 
-<!-- MenuUI owns the complete menu shell, navigation, and active-tab placement. -->
+<!-- MenuUI owns the whole resizable desktop-menu composition. -->
 <section class="menu-ui" aria-label="Nibbles menu">
-  <button class="menu-backdrop" onclick={app.toggleSettings} aria-label="Close menu"></button>
+  <div class="menu-backdrop" aria-hidden="true"></div>
 
   <div class="menu-panel">
-    <header class="menu-header">
-      <div class="menu-title">
-        <p>NIBBLES</p>
-        <h1>{titles[app.menuView]}</h1>
+    <!--
+      Empty header space starts native window dragging. The desktop service
+      ignores buttons so the close control remains independently clickable.
+    -->
+    <div
+      class="title-bar"
+      role="toolbar"
+      tabindex="-1"
+      aria-label="Draggable window title bar"
+      data-tauri-drag-region
+      onpointerdown={app.startDragging}
+    >
+      <div class="brand" data-tauri-drag-region>
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div data-tauri-drag-region>
+          <strong data-tauri-drag-region>NIBBLES</strong>
+          <small data-tauri-drag-region>FOCUS COMPANION</small>
+        </div>
       </div>
 
-      <div class="menu-tools">
+      <div class="drag-hint" data-tauri-drag-region aria-hidden="true">
+        <i></i><i></i><i></i>
+      </div>
+
+      <button
+        class="close-button"
+        onclick={app.toggleSettings}
+        aria-label="Close menu"
+        title="Close menu"
+      >
+        <Icon name="close" />
+      </button>
+    </div>
+
+    <div class="menu-body">
+      <aside class="menu-sidebar">
         <nav class="menu-tabs" aria-label="Menu sections">
+          <button
+            class:active={app.menuView === "activity"}
+            onclick={() => app.setMenuView("activity")}
+            aria-pressed={app.menuView === "activity"}
+          >
+            <span class="tab-icon"><Icon name="activity" /></span>
+            <span>
+              <strong>Activity</strong>
+              <small>Your focus history</small>
+            </span>
+          </button>
+
           <button
             class:active={app.menuView === "settings"}
             onclick={() => app.setMenuView("settings")}
-            aria-label="Settings"
             aria-pressed={app.menuView === "settings"}
-            title="Settings"
           >
-            <Icon name="settings" />
+            <span class="tab-icon"><Icon name="settings" /></span>
+            <span>
+              <strong>Ritual</strong>
+              <small>Timer and window rules</small>
+            </span>
           </button>
 
           <button
             class:active={app.menuView === "sound"}
             onclick={() => app.setMenuView("sound")}
-            aria-label="Sound settings"
             aria-pressed={app.menuView === "sound"}
-            title="Sound settings"
           >
-            <Icon name="sound" />
-          </button>
-
-          <button
-            class:active={app.menuView === "activity"}
-            onclick={() => app.setMenuView("activity")}
-            aria-label="Focus activity"
-            aria-pressed={app.menuView === "activity"}
-            title="Focus activity"
-          >
-            <Icon name="activity" />
+            <span class="tab-icon"><Icon name="sound" /></span>
+            <span>
+              <strong>Sound</strong>
+              <small>Ticks and ambience</small>
+            </span>
           </button>
         </nav>
 
-        <button class="close-button" onclick={app.toggleSettings} aria-label="Close menu" title="Close">
-          <Icon name="close" />
-        </button>
-      </div>
-    </header>
+        <p class="resize-note">
+          Drag the title bar to move this window. Drag any edge to resize it.
+        </p>
+      </aside>
 
-    <div class="menu-content">
-      {#if app.menuView === "settings"}
-        <RitualSettingsTab
-          watchMode={app.settings.watchMode}
-          rules={app.settings.rules}
-          lastExternalTitle={app.distraction.lastExternalTitle}
-          detectionSupported={app.distraction.detectionSupported}
-          focusMinutes={app.settings.focusMinutes}
-          breakMinutes={app.settings.breakMinutes}
-          overtimeEnabled={app.settings.overtimeEnabled}
-          growthEvery={app.settings.growthEvery}
-          minimizeAfter={app.settings.minimizeAfter}
-          finalPopEvery={app.settings.finalPopEvery}
-          onSetWatchMode={app.setWatchMode}
-          onAddRule={app.addRule}
-          onRemoveRule={app.removeRule}
-          onUseObservedWindow={app.useObservedWindow}
-          onUpdateDuration={app.updateDuration}
-          onSettingsChange={app.updateRitualSettings}
-          onPreviewForm={app.previewForm}
-        />
-      {:else if app.menuView === "sound"}
-        <SoundSettingsTab
-          tickEnabled={app.settings.tickEnabled}
-          breakMusicEnabled={app.settings.breakMusicEnabled}
-          soundVolume={app.settings.soundVolume}
-          tickStyle={app.settings.tickStyle}
-          ambientStyle={app.settings.ambientStyle}
-          ambientPreviewing={app.ambientPreviewing}
-          onSettingsChange={app.updateSoundSettings}
-          onPreviewTick={app.previewTick}
-          onToggleAmbientPreview={app.toggleAmbientPreview}
-        />
-      {:else}
-        <ActivityTab
-          trendChange={app.activity.trendChange}
-          trendDays={app.activity.trendDays}
-          trendMaximum={app.activity.trendMaximum}
-          weekFocusMinutes={app.activity.weekFocusMinutes}
-          weekBreakMinutes={app.activity.weekBreakMinutes}
-          weekCompletedFocuses={app.activity.weekCompletedFocuses}
-          weekSessionCount={app.activity.weekLogs.length}
-          averageFocusMinutes={app.activity.averageFocusMinutes}
-          weekCompletionRate={app.activity.weekCompletionRate}
-          logFilter={app.activity.logFilter}
-          filteredLogs={app.activity.filteredLogs}
-          totalLogCount={app.activity.sessionLogs.length}
-          onFilterChange={app.setLogFilter}
-        />
-      {/if}
+      <section class="menu-workspace">
+        <header class="view-heading">
+          <p>{viewDetails[app.menuView].eyebrow}</p>
+          <h1>{viewDetails[app.menuView].title}</h1>
+          <span>{viewDetails[app.menuView].description}</span>
+        </header>
+
+        <div class="menu-content">
+          {#if app.menuView === "settings"}
+            <RitualSettingsTab
+              watchMode={app.settings.watchMode}
+              rules={app.settings.rules}
+              lastExternalTitle={app.distraction.lastExternalTitle}
+              detectionSupported={app.distraction.detectionSupported}
+              focusMinutes={app.settings.focusMinutes}
+              breakMinutes={app.settings.breakMinutes}
+              overtimeEnabled={app.settings.overtimeEnabled}
+              growthEvery={app.settings.growthEvery}
+              minimizeAfter={app.settings.minimizeAfter}
+              finalPopEvery={app.settings.finalPopEvery}
+              onSetWatchMode={app.setWatchMode}
+              onAddRule={app.addRule}
+              onRemoveRule={app.removeRule}
+              onUseObservedWindow={app.useObservedWindow}
+              onUpdateDuration={app.updateDuration}
+              onSettingsChange={app.updateRitualSettings}
+              onPreviewForm={app.previewForm}
+            />
+          {:else if app.menuView === "sound"}
+            <SoundSettingsTab
+              tickEnabled={app.settings.tickEnabled}
+              breakMusicEnabled={app.settings.breakMusicEnabled}
+              soundVolume={app.settings.soundVolume}
+              tickStyle={app.settings.tickStyle}
+              ambientStyle={app.settings.ambientStyle}
+              ambientPreviewing={app.ambientPreviewing}
+              onSettingsChange={app.updateSoundSettings}
+              onPreviewTick={app.previewTick}
+              onToggleAmbientPreview={app.toggleAmbientPreview}
+            />
+          {:else}
+            <ActivityTab
+              trendChange={app.activity.trendChange}
+              trendDays={app.activity.trendDays}
+              trendMaximum={app.activity.trendMaximum}
+              weekFocusMinutes={app.activity.weekFocusMinutes}
+              weekBreakMinutes={app.activity.weekBreakMinutes}
+              averageFocusMinutes={app.activity.averageFocusMinutes}
+              logFilter={app.activity.logFilter}
+              filteredLogs={app.activity.filteredLogs}
+              totalLogCount={app.activity.sessionLogs.length}
+              onFilterChange={app.setLogFilter}
+            />
+          {/if}
+        </div>
+      </section>
     </div>
   </div>
+
+  <!-- Frameless windows need explicit edge hit areas for reliable resizing. -->
+  {#each resizeHandles as handle}
+    <button
+      class="resize-handle {handle.className}"
+      tabindex="-1"
+      aria-label={handle.label}
+      onpointerdown={(event) => app.startResizing(handle.direction, event)}
+    ></button>
+  {/each}
 </section>
 
 <style>
   .menu-ui {
+    --font-body: "Segoe UI Variable Text", "Segoe UI", sans-serif;
+    --font-display: "Segoe UI Variable Display", "Segoe UI", sans-serif;
     position: relative;
     width: 100%;
     height: 100%;
+    color: #f8eeee;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
   }
 
   .menu-backdrop {
     position: absolute;
-    z-index: 9;
     inset: 0;
-    border: 0;
-    background: rgba(6, 2, 7, 0.22);
-    backdrop-filter: blur(3px);
-    cursor: default;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(142, 42, 67, 0.2), transparent 32%),
+      rgba(4, 2, 6, 0.48);
+    backdrop-filter: blur(0.5rem);
   }
 
   .menu-panel {
     position: absolute;
-    z-index: 10;
-    inset: 0.75rem;
-    display: flex;
+    inset: 0.5rem;
+    display: grid;
+    grid-template-rows: 4.25rem minmax(0, 1fr);
     overflow: hidden;
-    padding: 1.5rem;
-    flex-direction: column;
-    border: 1px solid var(--color-border);
-    border-radius: 2.375rem 1.5625rem 2.5rem 1.6875rem / 1.875rem 2.5625rem 1.6875rem 2.4375rem;
+    border: 1px solid rgba(255, 234, 233, 0.1);
+    border-radius: 1.5rem;
     background:
-      radial-gradient(circle at 18% 3%, rgba(103, 31, 50, 0.34), transparent 31%),
-      linear-gradient(150deg, var(--color-surface), rgba(9, 5, 12, 0.95));
+      radial-gradient(circle at 5% 3%, rgba(136, 39, 64, 0.22), transparent 30%),
+      linear-gradient(145deg, rgba(29, 15, 27, 0.985), rgba(10, 7, 13, 0.99));
     box-shadow:
-      0 1.375rem 3.4375rem rgba(0, 0, 0, 0.52),
-      inset 0 1px rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(14px);
+      0 1.5rem 4rem rgba(0, 0, 0, 0.58),
+      inset 0 1px rgba(255, 255, 255, 0.045);
   }
 
-  .menu-header {
-    display: flex;
-    flex: 0 0 auto;
+  .title-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.625rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+    padding: 0 1rem 0 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+    cursor: move;
+    user-select: none;
   }
 
-  .menu-title {
+  .brand {
+    display: flex;
     min-width: 0;
-  }
-
-  .menu-title p {
-    margin: 0 0 0.125rem;
-    color: #b58b94;
-    font-size: 0.62rem;
-    font-weight: 850;
-    letter-spacing: 0.16em;
-  }
-
-  .menu-title h1 {
-    overflow: hidden;
-    margin: 0;
-    color: var(--color-text);
-    font-family: var(--font-display);
-    font-size: 1.65rem;
-    font-weight: 600;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .menu-tools,
-  .menu-tabs {
-    display: flex;
     align-items: center;
+    gap: 0.75rem;
   }
 
-  .menu-tools {
+  .brand-mark {
+    width: 0.75rem;
+    height: 0.75rem;
     flex: 0 0 auto;
-    gap: 0.5rem;
+    border: 2px solid #e65370;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 0.25rem rgba(230, 83, 112, 0.1),
+      0 0 1rem rgba(230, 83, 112, 0.38);
   }
 
-  .menu-tabs {
+  .brand strong,
+  .brand small {
+    display: block;
+  }
+
+  .brand strong {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 720;
+    letter-spacing: 0.14em;
+  }
+
+  .brand small {
+    margin-top: 0.125rem;
+    color: #a28d93;
+    font-size: 0.8rem;
+    font-weight: 650;
+    letter-spacing: 0.11em;
+  }
+
+  .drag-hint {
+    display: flex;
     gap: 0.2rem;
-    padding: 0.2rem;
-    border: 1px solid rgba(255, 255, 255, 0.055);
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.22);
+    padding: 0.75rem 2rem;
   }
 
-  .menu-tabs button,
+  .drag-hint i {
+    width: 0.2rem;
+    height: 0.2rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+  }
+
   .close-button {
     display: grid;
-    width: 1.9rem;
-    height: 1.9rem;
+    width: 2.35rem;
+    height: 2.35rem;
+    justify-self: end;
     padding: 0;
     place-items: center;
-    border: 1px solid transparent;
-    border-radius: 50%;
-    font-size: 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.035);
+    color: #a99096;
+    font-size: 1.1rem;
+    cursor: pointer;
     transition: var(--transition-fast);
-  }
-
-  .menu-tabs button {
-    background: transparent;
-    color: #765f68;
-  }
-
-  .menu-tabs button:hover,
-  .menu-tabs button:focus-visible {
-    color: #e8ced0;
-  }
-
-  .menu-tabs button.active {
-    border-color: rgba(244, 111, 130, 0.2);
-    background: linear-gradient(145deg, rgba(130, 34, 58, 0.8), rgba(55, 13, 34, 0.83));
-    color: #fff0ec;
-    box-shadow: 0 0.2rem 0.625rem rgba(38, 4, 20, 0.3);
-  }
-
-  .close-button {
-    border-color: var(--color-border);
-    background: linear-gradient(145deg, rgba(46, 17, 31, 0.8), rgba(16, 7, 16, 0.72));
-    color: rgba(247, 224, 220, 0.72);
-    box-shadow: 0 0.3rem 0.875rem rgba(0, 0, 0, 0.23);
   }
 
   .close-button:hover,
   .close-button:focus-visible {
-    border-color: rgba(230, 146, 153, 0.34);
-    background: linear-gradient(145deg, rgba(111, 30, 50, 0.9), rgba(41, 10, 27, 0.84));
-    color: #fff4ef;
-    transform: translateY(-1px);
+    border-color: rgba(239, 99, 124, 0.28);
+    background: rgba(149, 41, 64, 0.34);
+    color: #fff4f1;
+  }
+
+  .menu-body {
+    display: grid;
+    grid-template-columns: 13.5rem minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .menu-sidebar {
+    display: flex;
+    min-height: 0;
+    padding: 1.35rem 1rem 1.1rem;
+    flex-direction: column;
+    border-right: 1px solid rgba(255, 255, 255, 0.055);
+    background: rgba(0, 0, 0, 0.13);
+  }
+
+  .menu-tabs {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .menu-tabs button {
+    display: grid;
+    grid-template-columns: 2.45rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    min-height: 3.65rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid transparent;
+    border-radius: 0.9rem;
+    background: transparent;
+    color: #8d787f;
+    text-align: left;
+    transition: var(--transition-fast);
+  }
+
+  .tab-icon {
+    display: grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border-radius: 0.7rem;
+    background: rgba(255, 255, 255, 0.035);
+    font-size: 1.15rem;
+  }
+
+  .menu-tabs strong,
+  .menu-tabs small {
+    display: block;
+  }
+
+  .menu-tabs strong {
+    color: #dac7ca;
+    font-size: 1rem;
+    font-weight: 650;
+  }
+
+  .menu-tabs small {
+    overflow: hidden;
+    margin-top: 0.12rem;
+    color: #a08a90;
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .menu-tabs button:hover,
+  .menu-tabs button:focus-visible {
+    border-color: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.035);
+    color: #dfc9cd;
+  }
+
+  .menu-tabs button.active {
+    border-color: rgba(239, 99, 124, 0.19);
+    background:
+      linear-gradient(120deg, rgba(132, 37, 61, 0.38), rgba(74, 24, 45, 0.2));
+    color: #ff7088;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.035);
+  }
+
+  .menu-tabs button.active strong {
+    color: #fff0ee;
+  }
+
+  .menu-tabs button.active small {
+    color: #b98e98;
+  }
+
+  .menu-tabs button.active .tab-icon {
+    background: rgba(184, 52, 78, 0.2);
+    box-shadow: 0 0.45rem 1rem rgba(41, 5, 20, 0.2);
+  }
+
+  .resize-note {
+    margin: auto 0.35rem 0;
+    color: #948087;
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+
+  .menu-workspace {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    min-width: 0;
+    min-height: 0;
+    padding: 1.6rem 1.75rem 1.5rem;
+  }
+
+  .view-heading {
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .view-heading p {
+    margin: 0 0 0.3rem;
+    color: #d0546c;
+    font-size: 0.82rem;
+    font-weight: 750;
+    letter-spacing: 0.16em;
+  }
+
+  .view-heading h1 {
+    margin: 0;
+    color: #fff2ef;
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 3.2vw, 2.35rem);
+    font-weight: 670;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+  }
+
+  .view-heading span {
+    display: block;
+    max-width: 34rem;
+    margin-top: 0.45rem;
+    color: #b39da2;
+    font-size: 0.96rem;
+    line-height: 1.55;
   }
 
   .menu-content {
-    display: flex;
+    min-width: 0;
     min-height: 0;
-    flex: 1 1 auto;
-    padding-right: 0.1875rem;
+    padding-right: 0.35rem;
     overflow: auto;
-    scrollbar-color: #633048 transparent;
+    scrollbar-color: #6f3048 transparent;
     scrollbar-width: thin;
   }
 
   .menu-content > :global(*) {
     width: 100%;
+  }
+
+  .resize-handle {
+    position: absolute;
+    z-index: 50;
+    padding: 0;
+    background: transparent;
+  }
+
+  .resize-handle.north,
+  .resize-handle.south {
+    right: 0.75rem;
+    left: 0.75rem;
+    height: 0.5rem;
+  }
+
+  .resize-handle.east,
+  .resize-handle.west {
+    top: 0.75rem;
+    bottom: 0.75rem;
+    width: 0.5rem;
+  }
+
+  .resize-handle.north {
+    top: 0;
+    cursor: n-resize;
+  }
+
+  .resize-handle.south {
+    bottom: 0;
+    cursor: s-resize;
+  }
+
+  .resize-handle.east {
+    right: 0;
+    cursor: e-resize;
+  }
+
+  .resize-handle.west {
+    left: 0;
+    cursor: w-resize;
+  }
+
+  .resize-handle.north-east,
+  .resize-handle.north-west,
+  .resize-handle.south-east,
+  .resize-handle.south-west {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .resize-handle.north-east {
+    top: 0;
+    right: 0;
+    cursor: ne-resize;
+  }
+
+  .resize-handle.north-west {
+    top: 0;
+    left: 0;
+    cursor: nw-resize;
+  }
+
+  .resize-handle.south-east {
+    right: 0;
+    bottom: 0;
+    cursor: se-resize;
+  }
+
+  .resize-handle.south-west {
+    bottom: 0;
+    left: 0;
+    cursor: sw-resize;
+  }
+
+  @media (max-width: 640px) {
+    .menu-panel {
+      inset: 0.35rem;
+      grid-template-rows: 3.75rem minmax(0, 1fr);
+      border-radius: 1.15rem;
+    }
+
+    .title-bar {
+      padding-inline: 0.85rem;
+    }
+
+    .brand small,
+    .drag-hint,
+    .resize-note,
+    .menu-tabs small {
+      display: none;
+    }
+
+    .menu-body {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .menu-sidebar {
+      padding: 0.65rem 0.8rem;
+      border-right: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+    }
+
+    .menu-tabs {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .menu-tabs button {
+      grid-template-columns: auto auto;
+      min-height: 2.9rem;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.35rem;
+      text-align: center;
+    }
+
+    .tab-icon {
+      width: 2rem;
+      height: 2rem;
+      font-size: 1rem;
+    }
+
+    .menu-workspace {
+      padding: 1.15rem 1rem 1rem;
+    }
+
+    .view-heading {
+      padding-bottom: 0.9rem;
+    }
   }
 </style>

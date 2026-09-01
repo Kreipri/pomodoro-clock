@@ -1,5 +1,15 @@
 import { getCurrentWindow, LogicalSize, type Window as TauriWindow } from "@tauri-apps/api/window";
 
+export type ResizeDirection =
+  | "East"
+  | "North"
+  | "NorthEast"
+  | "NorthWest"
+  | "South"
+  | "SouthEast"
+  | "SouthWest"
+  | "West";
+
 function currentTauriWindow(): TauriWindow | null {
   // Vite browser preview has no Tauri internals; a null adapter keeps UI work possible.
   return "__TAURI_INTERNALS__" in window ? getCurrentWindow() : null;
@@ -18,13 +28,23 @@ export class DesktopWindowService {
     try {
       const screenWidth = window.screen.availWidth || 1280;
       const screenHeight = window.screen.availHeight || 800;
-      // Warning forms receive progressively larger windows; the menu has one fixed layout.
-      const sizes = menuOpen ? [[480, Math.min(600, screenHeight * .76)]] : [
+      // The menu opens as a substantial desktop panel, then remains user-resizable.
+      const menuWidth = Math.min(900, screenWidth * .86);
+      const menuHeight = Math.min(780, screenHeight * .88);
+      const sizes = menuOpen ? [[menuWidth, menuHeight]] : [
         [320, 300], [380, 360],
         [Math.min(600, screenWidth * .42), Math.min(560, screenHeight * .58)],
         [Math.min(980, screenWidth * .58), Math.min(820, screenHeight * .76)]
       ];
       const [width, height] = menuOpen ? sizes[0] : sizes[stage];
+
+      // Restore compact limits when leaving the menu so the companion cannot
+      // accidentally retain the menu's larger minimum dimensions.
+      const minimumWidth = menuOpen ? Math.min(640, screenWidth * .72) : 280;
+      const minimumHeight = menuOpen ? Math.min(540, screenHeight * .7) : 240;
+      await this.appWindow.setMinSize(
+        new LogicalSize(Math.round(minimumWidth), Math.round(minimumHeight))
+      );
       await this.appWindow.setSize(new LogicalSize(Math.round(width), Math.round(height)));
       await this.appWindow.center();
       // The compact companion is user-locked, but programmatic stage growth still
@@ -46,6 +66,12 @@ export class DesktopWindowService {
     if (event.button !== 0 || (event.target as HTMLElement).closest("button, input, select, label")) return;
     event.preventDefault();
     try { await this.appWindow?.startDragging(); } catch { /* Browser preview. */ }
+  }
+
+  async startResizing(direction: ResizeDirection, event: PointerEvent): Promise<void> {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    try { await this.appWindow?.startResizeDragging(direction); } catch { /* Browser preview. */ }
   }
 
   async minimize(): Promise<void> { try { await this.appWindow?.minimize(); } catch { /* Window closed. */ } }

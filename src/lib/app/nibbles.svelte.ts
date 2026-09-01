@@ -7,7 +7,10 @@ import type { Phase } from "$lib/features/timer/types";
 import type { LogFilter } from "$lib/features/activity/types";
 import type { MenuView } from "$lib/types";
 import { AudioEngine } from "$lib/services/audio/audio-engine";
-import { DesktopWindowService } from "$lib/services/desktop/desktop-window";
+import {
+  DesktopWindowService,
+  type ResizeDirection
+} from "$lib/services/desktop/desktop-window";
 import { ForegroundMonitor } from "$lib/services/desktop/foreground-monitor";
 import { loadAppState, saveAppState } from "$lib/services/persistence/settings-storage";
 
@@ -39,6 +42,8 @@ export class NibblesApp {
   private timerInterval: ReturnType<typeof setInterval> | null = null;
   private monitorInterval: ReturnType<typeof setInterval> | null = null;
   private audioPreviewTimeout: ReturnType<typeof setTimeout> | null = null;
+  // Menu mode is never always-on-top, but the companion's preference is restored.
+  private companionPinnedBeforeMenu = true;
   // These values prevent expensive resize-and-center calls on every one-second tick.
   private lastWindowStage = -1;
   private lastMenuOpen = false;
@@ -54,8 +59,11 @@ export class NibblesApp {
     const snapshot = loadAppState();
     this.settings.hydrate(snapshot.settings);
     this.activity.hydrate(snapshot.activity);
+    // Hydration removes legacy/short activity entries; persist the cleaned history.
+    this.persist();
     this.timer.reset(this.settings.timerConfig);
     this.pinned = await this.desktop.isPinned();
+    this.companionPinnedBeforeMenu = this.pinned;
     // Timer cadence and foreground polling intentionally differ: window changes
     // should be detected quickly, while productive time advances once per second.
     this.timerInterval = setInterval(() => this.tick(), 1000);
@@ -152,8 +160,17 @@ export class NibblesApp {
 
   toggleSettings = (): void => {
     // Opening the menu always starts on activity, matching the primary menu action.
-    this.settingsOpen = !this.settingsOpen;
-    if (this.settingsOpen) this.menuView = "activity";
+    const opening = !this.settingsOpen;
+    this.settingsOpen = opening;
+    if (opening) {
+      this.menuView = "activity";
+      this.companionPinnedBeforeMenu = this.pinned;
+      this.pinned = false;
+      void this.desktop.setPinned(false);
+    } else {
+      this.pinned = this.companionPinnedBeforeMenu;
+      void this.desktop.setPinned(this.pinned);
+    }
     this.distraction.resetPreview();
     this.syncWindowState();
   };
@@ -161,6 +178,8 @@ export class NibblesApp {
   previewForm = (stage: number): void => {
     // The menu closes so the selected creature form has the full window to render.
     this.settingsOpen = false;
+    this.pinned = this.companionPinnedBeforeMenu;
+    void this.desktop.setPinned(this.pinned);
     this.distraction.preview(stage, () => this.syncWindowState());
     this.syncWindowState();
   };
@@ -189,11 +208,17 @@ export class NibblesApp {
   };
 
   togglePinned = async (): Promise<void> => {
+    // Menu mode deliberately cannot become always-on-top.
+    if (this.settingsOpen) return;
     this.pinned = !this.pinned;
+    this.companionPinnedBeforeMenu = this.pinned;
     await this.desktop.setPinned(this.pinned);
   };
 
   startDragging = (event: PointerEvent): void => { void this.desktop.startDragging(event); };
+  startResizing = (direction: ResizeDirection, event: PointerEvent): void => {
+    void this.desktop.startResizing(direction, event);
+  };
   minimize = (): void => { void this.desktop.minimize(); };
   close = (): void => { void this.desktop.close(); };
 

@@ -1,5 +1,12 @@
-import { buildTrendDays, trendChange } from "./statistics";
+import {
+  buildTrendDays,
+  sessionDurationSeconds,
+  trendChange
+} from "./statistics";
 import type { ActivityData, LogFilter, SessionLog, SessionUpdate } from "./types";
+
+/** Sessions must exceed five minutes before they count toward Activity. */
+const MIN_LOGGED_SESSION_SECONDS = 5 * 60;
 
 /** Owns session history, the selected log filter, and chart-ready summaries. */
 export class ActivityStore {
@@ -22,6 +29,9 @@ export class ActivityStore {
   get filteredLogs() { return this.sessionLogs.filter((log) => this.logFilter === "all" || log.phase === this.logFilter).slice(0, 12); }
 
   record(update: SessionUpdate): void {
+    // Very short starts and accidental stops should not create activity noise.
+    if (sessionDurationSeconds(update.log) <= MIN_LOGGED_SESSION_SECONDS) return;
+
     // Overtime first logs at 00:00, then replaces that newest entry when it ends.
     if (update.replaceLatest) {
       const [latest, ...remaining] = this.sessionLogs;
@@ -33,12 +43,19 @@ export class ActivityStore {
   }
 
   hydrate(activity: ActivityData): void {
-    // Input has already been validated by the persistence migration.
+    // Prune historical short sessions as the saved data is loaded.
     this.completedFocuses = activity.completedFocuses;
-    this.sessionLogs = [...activity.sessionLogs];
+    this.sessionLogs = activity.sessionLogs
+      .filter((log) => sessionDurationSeconds(log) > MIN_LOGGED_SESSION_SECONDS)
+      .slice(0, 100);
   }
 
   snapshot(): ActivityData {
-    return { completedFocuses: this.completedFocuses, sessionLogs: [...this.sessionLogs] };
+    return {
+      completedFocuses: this.completedFocuses,
+      sessionLogs: this.sessionLogs.filter(
+        (log) => sessionDurationSeconds(log) > MIN_LOGGED_SESSION_SECONDS
+      )
+    };
   }
 }
